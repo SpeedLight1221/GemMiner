@@ -9,6 +9,7 @@
         Title="MainWindow" Height="700" Width="800">
     <Canvas x:Name="MyCan">
         <Rectangle x:Name="player"  Width="100" Height="100" Fill="Red" Canvas.Left="25" Canvas.Bottom="0"></Rectangle>
-        <Rectangle x:Name="Ground"  Width="100" Height="100" Fill="Brown" Canvas.Left="150" Canvas.Bottom="0"></Rectangle>
+        <Rectangle x:Name="Ground"  Tag="CollideY"  Width="100" Height="100" Fill="Brown" Canvas.Left="35" Canvas.Bottom="0" ></Rectangle>
+        <Rectangle x:Name="Ground_Copy"  Tag="CollideY"  Width="100" Height="100" Fill="Brown" Canvas.Left="35" Canvas.Bottom="100" />
     </Canvas>
 </Window>
