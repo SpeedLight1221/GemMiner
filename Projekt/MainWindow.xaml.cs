@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Shell;
 using System.Windows.Threading;
 
 
@@ -23,222 +24,129 @@ namespace Projekt
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-    
+
     public partial class MainWindow : Window
     {
 
         public bool D = false;
-        public int Span = 9999;
+        public bool A = false;
+        public bool CD = false;
+        public int Span = 10000;
         public double Size = 100d;
         public double level = 0;
 
-        DispatcherTimer timer = new DispatcherTimer();
+        DispatcherTimer Movetimer = new DispatcherTimer();
 
         double maxHeight = 0.0;
-       
+        double maxRight = 0.0;
+
         public bool blockedY = false;
         public MainWindow()
         {
             InitializeComponent();
-            timer.Interval = new TimeSpan(Span);
+            Movetimer.Interval = new TimeSpan(Span);
 
-
-
-
-#region down
-            this.KeyDown += (s, e) =>
+            this.KeyDown += (s,e) =>
             {
-                if (blockedY == false)
+                if (CD == false)
                 {
                     switch (e.Key)
                     {
-                        
-
-
-                        case (Key.Space):
-
-                            
-                            blockedY = true;
-                            jump();
+                        case Key.Space:
+                            Jump();
                             break;
-
-
-
-
-                        case (Key.D):
+                        case Key.D:
                             D = true;
-                            GoRight();
+                            A = false;
                             break;
-
-
-
-                        
-                    }
-                    
-
-
-
-                    
-                }
-            };
-#endregion
-#region Up
-            this.KeyUp += (s, e) =>
-            {
-                switch(e.Key)
-                {
-                    case (Key.Space):
-                        
-                        
-                        break;
-                    case Key.D:
-                        D = false;
-                        break;
-
-                    
-                        
-                }
-
-
-            };
-#endregion
-
-
-
-
-
-
-        }
-
-
-        public void jump()
-        {
-            maxHeight = Canvas.GetBottom(player) + 150d;
-            Canvas.SetBottom(player, maxHeight - 69.5d);
-            //MessageBox.Show(maxHeight.ToString());
-            timer.Tick += (s, e) =>
-            {
-                double y = Canvas.GetBottom(player);
-                Canvas.SetBottom(player, y + 0.5d);
-                if (D == true)
-                {
-                    foreach (var control in MyCan.Children.OfType<Rectangle>())
-                    {
-                        if (control.Name != "player")
-                        {
-                            if ((Canvas.GetLeft(player) + Size > Canvas.GetLeft(control)-1)
-                                && (Canvas.GetLeft(player) < Canvas.GetLeft(control) + Size)
-                                && (Canvas.GetBottom(player) > Canvas.GetBottom(control)+Size))
-                            {
-                                level = 100;
-                                blockedY = false;
-                            }
-                            else if ((Canvas.GetLeft(player) + Size > Canvas.GetLeft(control) - 1)
-                                && (Canvas.GetLeft(player) < Canvas.GetLeft(control) + Size))
-                            {
-
-                            }
-                            else
-                            {
-                                Canvas.SetLeft(player, Canvas.GetLeft(player) + 2d);
-                            }
-                        }
-                    }
-                    if (y + 0.5 >= maxHeight)
-                    {
-                        timer.Stop();
-                        Cooldown();
-                        Gravity();
-                    }
-                }
-                else
-                {
-                    if (y + 0.5 >= maxHeight)
-                    {
-                        timer.Stop();
-                        Cooldown();
-                        Gravity();
+                        case Key.A:
+                            A = true;
+                            D = false;
+                            break;
                     }
                 }
             };
-            timer.Start();
-        }
-        public void Gravity()
-        {
+
+
+
+
+
+
             
-            double y = Canvas.GetBottom(player);
+
+        }
+
+
+        public void Jump()
+        {
+            maxHeight = Canvas.GetBottom(player)+101d ;
+            maxRight = Canvas.GetLeft(player)+10d;
            
-            DispatcherTimer gravTimer = new DispatcherTimer();
-            gravTimer.Interval = new TimeSpan(Span);
-            gravTimer.Tick += (s, e) =>
+            Movetimer.Tick += (s, e) =>
             {
-                if (y > level)
+                double Y = 0;
+                double X = 0;
+                if (D == true)//if jumping and moving right
                 {
-                    Canvas.SetBottom(player, y - 0.5d);
-                    y = Canvas.GetBottom(player);
+                    CoolDown();
+
+
+                    Y = Canvas.GetBottom(player);
+                    X = Canvas.GetLeft(player);
+
+
+                    Canvas.SetBottom(player, Y + 0.5d);
+                    Y = Canvas.GetBottom(player);
+                    Canvas.SetLeft(player, X + 0.2d);
+                    X = Canvas.GetLeft(player);
                 }
-                else if (y < level)
+                else if(A ==true)//if jumping and moving left
                 {
-                    Canvas.SetBottom(player, 0);
-                    gravTimer.Stop();
+                    
+
                 }
-                else
+                else// if only  jumping
                 {
-                    gravTimer.Stop();
+                    
+                    CoolDown();
+                    
+                    
+                    Y = Canvas.GetBottom(player);
+                    
+
+                    Canvas.SetBottom(player, Y + 0.5d);
+                     Y = Canvas.GetBottom(player);
+                    
+                }
+                if (Y + 0.5d >= maxHeight)
+                {
+                    
+                    Movetimer.Stop();
+                    D = false;
+                    A = false;
+                    //Gravity
                 }
             };
-            gravTimer.Start();
+            Movetimer.Start();
         }
 
 
-        public void Cooldown()
+        public void CoolDown()
         {
-            DispatcherTimer cdTimer = new DispatcherTimer();
-            player.Fill = Brushes.Red;
-            cdTimer.Interval = new TimeSpan(0,0,0,0,60);
-            cdTimer.Tick += (s, e) =>
+           
+            CD = true;
+            
+            DispatcherTimer CDTimer = new DispatcherTimer();
+            CDTimer.Interval = new TimeSpan(0,0,1);
+            CDTimer.Tick += (s, e) =>
             {
-                if (Canvas.GetBottom(player) == 0)
-                {
-                    blockedY = false;
-                    cdTimer.Stop();
-                    player.Fill = Brushes.Blue;
-                }
+                CD = false;
+                
+                
+                CDTimer.Stop();
+
             };
-            cdTimer.Start();
-            
-            
+            CDTimer.Start();
         }
-
-
-        public void GoRight()
-        {
-
-            
-            foreach (var control in MyCan.Children.OfType<Rectangle>())
-            {
-                if (control.Name != "player")
-                {
-                    if ((Canvas.GetLeft(player) + Size > Canvas.GetLeft(control) - 1)
-                        && (Canvas.GetLeft(player) < Canvas.GetLeft(control) + Size)
-                        && (Canvas.GetBottom(control) + Size > Canvas.GetBottom(player)+1))
-                    {
-
-                    }
-                    else
-                    {
-                        Canvas.SetLeft(player, Canvas.GetLeft(player) + 1d);
-                    }
-                }
-            }
-        }
-
-
-
     }
-
-
-    
-
-
 }
