@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 
 namespace Projekt
@@ -21,38 +22,47 @@ namespace Projekt
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    
     public partial class MainWindow : Window
     {
+        DispatcherTimer timer = new DispatcherTimer();
 
+        double maxHeight = 0.0;
         public double Y = 0;
         public bool blockedY = false;
         public MainWindow()
         {
             InitializeComponent();
-            
+            timer.Interval = new TimeSpan(70);
+            ;
+
             this.KeyDown += (s, e) =>
             {
                 switch(e.Key)
                 {
                     case (Key.Space):
-                        if(blockedY==false)
-                        {
-                            blockedY = true;
+
+                        maxHeight = Canvas.GetBottom(player)+70d;
+                        //MessageBox.Show(maxHeight.ToString());
+                   
 
 
-                                Y = Canvas.GetBottom(player);
-
-                                player.SetValue(Canvas.BottomProperty, Y);
-                                
-                            
-
-
-                        }
-
-                        
-                       
                         break;
                 }
+                timer.Tick += (s, e) =>
+                {
+                    double y = Canvas.GetBottom(player);
+                    Canvas.SetBottom(player, y + 1.0d);
+                    if (y + 1.0 >= maxHeight)
+                    {
+                        timer.Stop();
+                    }
+                };
+
+
+
+                timer.Start();
             };
 
 
