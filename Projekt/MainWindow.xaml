@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projekt"
-       
+        WindowStartupLocation="CenterOwner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="800">
+        Title="MainWindow" Height="1080" Width="1920">
     <Canvas x:Name="MyCan">
-        <Rectangle x:Name="player"  Width="100" Height="100" Fill="Red" Canvas.Left="25" Canvas.Bottom="0"></Rectangle>
-        <Rectangle x:Name="Ground"  Tag="CollideY"  Width="100" Height="100" Fill="Brown" Canvas.Left="35" Canvas.Bottom="0" ></Rectangle>
-        <Rectangle x:Name="Ground_Copy"  Tag="CollideY"  Width="100" Height="100" Fill="Brown" Canvas.Left="35" Canvas.Bottom="100" />
+        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="0" Canvas.Bottom="100"></Rectangle>
+        <Rectangle x:Name="Ground"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="0" ></Rectangle>
+        <Rectangle x:Name="Ground_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="300" Canvas.Bottom="100"  />
+        <Rectangle x:Name="Ground_Copy1"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="0"  />
     </Canvas>
 </Window>

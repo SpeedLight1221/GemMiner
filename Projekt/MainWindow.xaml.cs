@@ -27,6 +27,10 @@ namespace Projekt
     /// </summary>
     /// 
 
+
+    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False) 
+
+
     public partial class MainWindow : Window
     {
 
@@ -35,7 +39,7 @@ namespace Projekt
         public bool CD = false;
         public int Span = 200;
         public double Size = 100d;
-        public double level = 0;
+        public double level = 100;
         public bool moving =false;
 
         DispatcherTimer Movetimer = new DispatcherTimer();
@@ -48,24 +52,7 @@ namespace Projekt
         public MainWindow()
         {
             InitializeComponent();
-
-
-           
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            Generate();
 
 
             this.KeyDown += (s, e) =>
@@ -80,6 +67,7 @@ namespace Projekt
                         case Key.D:
                             D = true;
                             A = false;
+                            Right();
                             break;
                         case Key.A:
                             A = true;
@@ -116,21 +104,21 @@ namespace Projekt
         {
             move.Completed -= JumpCompleted;
            
-            Gravity();
+            JumpGravity();
         }
 
 
-        public void Gravity()
+        public void JumpGravity()
         {
             moving = false;
 
             if (CD|| moving) { return; }
             moving = true;
-            move.Completed -= GravityCompleted;
-            move.Completed += GravityCompleted;
+            move.Completed -= JumpGravityCompleted;
+            move.Completed += JumpGravityCompleted;
             foreach (var control in MyCan.Children.OfType<Rectangle>()) // checks if we arent on a higher ground
             {
-                if (control.Tag as string== "CollideY")
+                if ((control.Tag as string)[1] == 'Y')
                 {
                     if ((Canvas.GetLeft(control) < Canvas.GetLeft(player) + Size) && (Canvas.GetLeft(control) + Size > Canvas.GetLeft(player)))
                        {
@@ -145,10 +133,10 @@ namespace Projekt
 
         }
 
-        public void GravityCompleted(object sender, EventArgs e)
+        public void JumpGravityCompleted(object sender, EventArgs e)
         {
             moving = false;
-            move.Completed -= GravityCompleted;
+            move.Completed -= JumpGravityCompleted;
             CD = false;
             
 
@@ -192,6 +180,98 @@ namespace Projekt
             
             
             
+        }
+
+        public void Right()//movement right
+        {
+            foreach(var collCheck in MyCan.Children.OfType<Rectangle>()) //checks for collision, if the player is next to block and tries moving into it, cancels the movement
+            {
+                if((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) + Size) &&(Canvas.GetBottom(player)==Canvas.GetBottom(collCheck)))
+                {
+                    
+                    return; 
+                    
+                    
+                }
+            }
+
+
+
+            foreach(var control in MyCan.Children.OfType<Rectangle>()) //if there are no collisions,moves all the blocks left, giving the illusion of moving right.
+            {
+
+                if ((control.Tag as string)[0] == 'G')
+                {
+
+                    Canvas.SetLeft(control, Canvas.GetLeft(control) - 100d);
+                    
+                }
+            }
+
+
+            FallGravity();
+
+
+        }
+
+
+        public void FallGravity()
+        {
+            
+            if (level != 0)
+            {
+                foreach (var control in MyCan.Children.OfType<Rectangle>())
+                {
+
+                    if ((control.Tag as string)[0] == 'G')
+                    {
+                        if ((Canvas.GetLeft(control) == Canvas.GetLeft(player) ) && (Canvas.GetBottom(player) == Canvas.GetBottom(control)+Size))//checks if there is a ground block beneath the players "Desired location"
+                        {
+                            
+                            return;
+                            
+                        }
+                        
+                    }
+                }
+
+                Canvas.SetBottom(player, Canvas.GetBottom(player) - Size);
+                level -= 100;
+
+
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+        public void Generate()
+        {
+            MessageBox.Show("x");
+            for(int i=0; i<100; i++)
+            {
+                if(i>5) 
+                {
+                    Rectangle block = new Rectangle();
+                    block.Fill = Brushes.Brown;
+                    block.Width = 100;
+                    block.Height = 100;
+                    block.Tag = "GY";
+                    Canvas.SetBottom(block, 0);
+                    Canvas.SetLeft(block, i * 100);
+                    MyCan.Children.Add(block);
+                    if (i % 10 == 0) { block.Fill = Brushes.Green; }
+                }
+                    
+            }
         }
 
         
