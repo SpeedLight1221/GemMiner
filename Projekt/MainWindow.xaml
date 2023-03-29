@@ -12,8 +12,10 @@
         <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="0" Canvas.Bottom="100"></Rectangle>
         <Rectangle x:Name="Ground"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="0" ></Rectangle>
         <Rectangle x:Name="Ground_Copy1"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="0"  />
-        <Rectangle x:Name="Ground_Copy2"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="200" Canvas.Bottom="100"  />
         <Label x:Name="test_Copy" Width="100" Height="100" Canvas.Left="960" Canvas.Top="382" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Rectangle x:Name="Ground_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="100"/>
+        <Label Background="AliceBlue" x:Name="test_Copy1" Width="100" Height="100" Canvas.Left="733"  Canvas.Bottom="300"/>
+        <Rectangle x:Name="Ground_Copyg"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="200"/>
 
 
     </Canvas>
