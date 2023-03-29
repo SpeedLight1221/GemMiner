@@ -42,7 +42,7 @@ namespace Projekt
         public double level = 100;
         public bool jumping =false;
 
-        DispatcherTimer Movetimer = new DispatcherTimer();
+        DispatcherTimer coolDown= new DispatcherTimer();
         //create storyboard
         Storyboard move = new Storyboard();
         double maxHeight = 0.0;
@@ -56,6 +56,7 @@ namespace Projekt
             level = Canvas.GetBottom(player);
             test.Content = level;
             ts = Canvas.GetBottom(player);
+            JumpGravity();
             test_Copy.Content = ts;
 
             this.KeyDown += (s, e) =>
@@ -99,7 +100,9 @@ namespace Projekt
             jumping = true;
             move.Completed -= JumpCompleted;
             move.Completed += JumpCompleted;
-            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) + 170d,true);
+            level = Canvas.GetBottom(player);
+            
+            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) + 150d,true);
             
         }
 
@@ -107,30 +110,31 @@ namespace Projekt
         {
             move.Completed -= JumpCompleted;
            
+            
             JumpGravity();
         }
 
 
         public void JumpGravity()
         {
-            jumping = false;
             
-            if (CD|| jumping) { return; }
-            jumping = true;
+            
+           ;
             move.Completed -= JumpGravityCompleted;
             move.Completed += JumpGravityCompleted;
-            foreach (var control in MyCan.Children.OfType<Rectangle>()) // checks if we arent on a higher ground
-            {
+            //foreach (var control in MyCan.Children.OfType<Rectangle>()) // checks if we arent on a higher ground
+            //{
                
-                if ((control.Tag as string)[1] == 'Y')
-                {
-                    if ((Canvas.GetLeft(control) == Canvas.GetLeft(player) + Size)) //&& (Canvas.GetLeft(control) + Size > Canvas.GetLeft(player)))
-                    {
-                        level = level+ 100;
+            //    if ((control.Tag as string)[1] == 'Y')
+            //    {
+            //        if ((Canvas.GetLeft(control) == Canvas.GetLeft(player))) //&& (Canvas.GetLeft(control) + Size > Canvas.GetLeft(player)))
+            //        {
+                       
+            //            Canvas.SetBottom(player, level);
                         
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
 
             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), level, false);
             
@@ -139,9 +143,9 @@ namespace Projekt
 
         public void JumpGravityCompleted(object sender, EventArgs e)
         {
-            jumping = false;
+            
             move.Completed -= JumpGravityCompleted;
-            CD = false;
+            cooldown();
             test.Content = level;
             FallGravity();
 
@@ -179,7 +183,7 @@ namespace Projekt
                
 
             
-            move.Completed += (s, e) => { CD = false; jumping = false; };
+            
             move.Begin();
             
             
@@ -191,20 +195,21 @@ namespace Projekt
         public void Right()//movement right
         {
 
-            if (!jumping)
+            if (Canvas.GetBottom(player)>level+100)
             {
                 foreach (var collCheck in MyCan.Children.OfType<Rectangle>()) //checks for collision, if the player is next to block and tries moving into it, cancels the movement
                 {
-                    if ((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) + Size) && (Canvas.GetBottom(player) < Canvas.GetBottom(collCheck) + Size))
+                    if ((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) + Size) && (level+Size == Canvas.GetBottom(collCheck)))//checks if there is a block on the "desired position"
                     {
-
+                        
                         return;
 
 
                     }
                 }
 
-
+               
+                Canvas.SetBottom(player, level);
 
                 foreach (var control in MyCan.Children.OfType<Rectangle>()) //if there are no collisions,moves all the blocks left, giving the illusion of moving right.
                 {
@@ -213,39 +218,13 @@ namespace Projekt
                     {
 
                         Canvas.SetLeft(control, Canvas.GetLeft(control) - 100d);
+                        
 
 
                     }
                 }
             }
-            else
-            {
-                foreach (var collCheck in MyCan.Children.OfType<Rectangle>()) //checks for collision, if the player is next to block and tries moving into it, cancels the movement
-                {
-                    if ((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) + Size) && (Canvas.GetBottom(player) < Canvas.GetBottom(collCheck) + 2*Size))
-                    {
-
-                        return;
-
-
-                    }
-                }
-
-
-
-                foreach (var control in MyCan.Children.OfType<Rectangle>()) //if there are no collisions,moves all the blocks left, giving the illusion of moving right.
-                {
-
-                    if ((control.Tag as string)[0] == 'G')
-                    {
-
-                        Canvas.SetLeft(control, Canvas.GetLeft(control) - 100d);
-
-
-                    }
-                }
-                Canvas.SetBottom(player, Canvas.GetBottom(player) + 100);
-            }
+            
 
             FallGravity();
 
@@ -257,7 +236,7 @@ namespace Projekt
         {
             if ((Canvas.GetBottom(player) % 100 != 0) || (Canvas.GetBottom(player) != 0))
             {
-                for (int i = -20; i < 20; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     if (((i + 1) * 100) > (Canvas.GetBottom(player)) && ((Canvas.GetBottom(player) > i * 100)))
                     {
@@ -290,7 +269,21 @@ namespace Projekt
 
         }        
 
+        public void cooldown()
+        {
+            jumping = false;
 
+            CD = true;
+            test.Background = Brushes.Red;
+            coolDown.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            coolDown.Start();
+            coolDown.Tick += (sender, e) =>
+            {
+                CD = false;
+                test.Background = Brushes.Blue;
+                coolDown.Stop();
+            };
+        }
 
 
 

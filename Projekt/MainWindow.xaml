@@ -13,7 +13,6 @@
         <Rectangle x:Name="Ground"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="0" ></Rectangle>
         <Rectangle x:Name="Ground_Copy1"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="0"  />
         <Rectangle x:Name="Ground_Copy2"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="200" Canvas.Bottom="100"  />
-        <Rectangle x:Name="Ground_Copy3"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="300" Canvas.Bottom="200"  />
         <Label x:Name="test_Copy" Width="100" Height="100" Canvas.Left="960" Canvas.Top="382" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 
