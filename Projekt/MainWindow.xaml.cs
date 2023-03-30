@@ -44,6 +44,7 @@ namespace Projekt
         public double level = 100;
         public bool jumping =false;
 
+
         DispatcherTimer coolDown= new DispatcherTimer();
         //create storyboard
         Storyboard move = new Storyboard();
@@ -92,12 +93,12 @@ namespace Projekt
         #region jump
         public void Jump()
         {
-            if (CD || jumping) { return; }
+            if (CD || jumping) { return;}
             jumping = true;
             move.Completed -= JumpCompleted;
             move.Completed += JumpCompleted;
             level = Canvas.GetBottom(player);
-            
+           
             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) + 150d,false);
             
         }
@@ -105,6 +106,7 @@ namespace Projekt
         public void JumpCompleted(object sender,EventArgs e) //in order to avoid a memory leak
         {
             move.Completed -= JumpCompleted;
+            move.FillBehavior = FillBehavior.HoldEnd;
 
             JumpGravity();
         }
@@ -128,8 +130,8 @@ namespace Projekt
         #endregion
         public void Animation(double x1, double x2, double y1, double y2,bool Grav)
         {
-            
 
+            move.FillBehavior = FillBehavior.HoldEnd;
 
             //definy movement X (left-right)
             DoubleAnimation AnimX = new DoubleAnimation();
@@ -158,7 +160,7 @@ namespace Projekt
             {
                 // if(Canvas.GetLeft(player) != x2) { Canvas.SetLeft(player, x2); }
                 //if (Canvas.GetBottom(player) != y2) { Canvas.SetLeft(player, y2); }
-                move.FillBehavior = FillBehavior.Stop;
+               
                 Canvas.SetLeft(player, x2);
                 Canvas.SetBottom(player, y2);
 
@@ -166,7 +168,7 @@ namespace Projekt
 
             
             if (Grav == true) { 
-                //move.Completed += FallGravity;
+                move.Completed += FallGravity;
                 test.Background = Brushes.PaleGreen;
             }
 
@@ -198,11 +200,12 @@ namespace Projekt
                             
                             JumpGravityCompleted(new object(), new EventArgs());
                             move.Stop();
-                            Canvas.SetBottom(player, level+Size);
+                           // Canvas.SetBottom(player, level+Size);
                             test.Content += "x";
-                            Canvas.SetLeft(player, Canvas.GetLeft(control));
-                            level += 100;
+                            //Canvas.SetLeft(player, Canvas.GetLeft(control));
                             
+                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(control), Canvas.GetBottom(player), level + Size, true);
+                            level += 100;
                             tess = false;
                             return;
                         }
@@ -302,8 +305,8 @@ namespace Projekt
                 Canvas.SetBottom(bedrock, -100);
                 Canvas.SetLeft(bedrock, i * 100);
                 MyCan.Children.Add(bedrock);
-                
-                if (i>5) 
+
+                if (i > 5)
                 {
                     Rectangle block = new Rectangle();
                     block.Fill = Brushes.Brown;
