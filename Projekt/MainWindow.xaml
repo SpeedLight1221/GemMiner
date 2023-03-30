@@ -16,6 +16,7 @@
         <Rectangle x:Name="Ground_Copy2"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="200" Canvas.Bottom="200" />
         <Rectangle x:Name="Ground_Copy3"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="300" Canvas.Bottom="200"   />
         <Rectangle x:Name="Ground_Copy4"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="300" Canvas.Bottom="300" />
+        <Rectangle x:Name="Ground_Copy5"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="400" Canvas.Bottom="200"    />
 
     </Canvas>
 </Window>

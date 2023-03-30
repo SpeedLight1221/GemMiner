@@ -31,6 +31,9 @@ namespace Projekt
     // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False) 
 
 
+    //TODO: Movement cooldown, Movement left.
+
+
     public partial class MainWindow : Window
     {
         int ttt = 0;
@@ -43,6 +46,8 @@ namespace Projekt
         public double Size = 100d;
         public double level = 100;
         public bool jumping =false;
+
+        
 
 
         DispatcherTimer coolDown= new DispatcherTimer();
@@ -240,6 +245,7 @@ namespace Projekt
         public void FallGravity(object sender, EventArgs e)
         {
             
+            
             foreach(var collCheck in MyCan.Children.OfType<Rectangle>())
             {
                 if((collCheck.Tag as string)[0] == 'G')
@@ -252,11 +258,27 @@ namespace Projekt
                 }
             }
 
-            
-            Canvas.SetBottom(player, level-Size);
-            test.Content += "x";
-            move.Completed -= FallGravity;
-            
+
+            for (int i = 2; i < 12; i++)
+            {
+                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                {
+                    if ((collCheck.Tag as string)[0] == 'G')
+                    {
+                        if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
+                        {
+                            player.Fill = Brushes.Yellow;
+
+                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false);
+                            return;
+
+                        }
+
+                    }
+                }
+            }
+          
+
 
 
 
