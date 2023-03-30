@@ -56,15 +56,16 @@ namespace Projekt
             InitializeComponent();
             Generate();
             level = Canvas.GetBottom(player);
-            test.Content = level;
+            
             ts = Canvas.GetBottom(player);
             JumpGravity();
-            test_Copy.Content = ts;
+            Right();
 
+            #region keys
             this.KeyDown += (s, e) =>
             {
-                
-                    switch (e.Key)
+                test.Content = Canvas.GetBottom(player) +" " + level+" "+ Canvas.GetLeft(player);
+                switch (e.Key)
                     {
                         case Key.Space:
                             Jump();
@@ -83,20 +84,12 @@ namespace Projekt
                 
             };
             
-            test_Copy1.Content = ttt;
-
-
-
-
-
-
-
 
         }
 
-        
+        #endregion
 
-
+        #region jump
         public void Jump()
         {
             if (CD || jumping) { return; }
@@ -105,55 +98,34 @@ namespace Projekt
             move.Completed += JumpCompleted;
             level = Canvas.GetBottom(player);
             
-            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) + 150d,true);
+            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) + 150d,false);
             
         }
 
-        public void JumpCompleted(object sender,EventArgs e)
+        public void JumpCompleted(object sender,EventArgs e) //in order to avoid a memory leak
         {
             move.Completed -= JumpCompleted;
-           
-            
+
             JumpGravity();
         }
 
 
         public void JumpGravity()
         {
-
-
-            
             move.Completed -= JumpGravityCompleted;
             move.Completed += JumpGravityCompleted;
-            //foreach (var control in MyCan.Children.OfType<Rectangle>()) // checks if we arent on a higher ground
-            //{
-
-            //    if ((control.Tag as string)[1] == 'Y')
-            //    {
-            //        if ((Canvas.GetLeft(control) == Canvas.GetLeft(player))) //&& (Canvas.GetLeft(control) + Size > Canvas.GetLeft(player)))
-            //        {
-
-            //            Canvas.SetBottom(player, level);
-
-            //        }
-            //    }
-            //}
+           
             if (tess) { return; }
             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), level, false);
-            
-
         }
 
         public void JumpGravityCompleted(object sender, EventArgs e)
         {
-            
             move.Completed -= JumpGravityCompleted;
             cooldown();
-            test.Content = level;
             //FallGravity();
-
-
         }
+        #endregion
         public void Animation(double x1, double x2, double y1, double y2,bool Grav)
         {
             
@@ -182,47 +154,44 @@ namespace Projekt
             move.Children.Add(AnimX);
             
 
-          
-               
+            move.Completed += (s, e) =>
+            {
+                // if(Canvas.GetLeft(player) != x2) { Canvas.SetLeft(player, x2); }
+                //if (Canvas.GetBottom(player) != y2) { Canvas.SetLeft(player, y2); }
+                move.FillBehavior = FillBehavior.Stop;
+                Canvas.SetLeft(player, x2);
+                Canvas.SetBottom(player, y2);
+
+            };
 
             
+            if (Grav == true) { 
+                //move.Completed += FallGravity;
+                test.Background = Brushes.PaleGreen;
+            }
+
             
             move.Begin();
-            
-            
-            
-            
-            
+ 
         }
         
         public void Right()//movement right
         {
-            ttt++;
-            test_Copy1.Content = ttt;
+         
+            
             if (Canvas.GetBottom(player)>level)
             {
-                
                 foreach (var collCheck in MyCan.Children.OfType<Rectangle>()) //checks for collision, if the player is next to block and tries moving into it, cancels the movement
                 {
                     if ((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) + Size) && (level+Size == Canvas.GetBottom(collCheck)))//checks if there is a block on the "desired position"
                     {
-                        
                         return;
-
-
                     }
                 }
-
-                
-               
-
                 foreach (var control in MyCan.Children.OfType<Rectangle>()) //if there is a block 1 higher and to the right, moves to it
                 {
-
                     if ((control.Tag as string)[0] == 'G')
                     {
-
-
                         if ((Canvas.GetLeft(control) == Canvas.GetLeft(player) + Size) && (level  == Canvas.GetBottom(control)))//checks if there is a block on the "desired position"
                         {
                             tess = true;
@@ -230,81 +199,82 @@ namespace Projekt
                             JumpGravityCompleted(new object(), new EventArgs());
                             move.Stop();
                             Canvas.SetBottom(player, level+Size);
+                            test.Content += "x";
                             Canvas.SetLeft(player, Canvas.GetLeft(control));
                             level += 100;
-                            test_Copy.Content = "" + Canvas.GetBottom(player)+" " + level;
+                            
                             tess = false;
                             return;
-                           
-                           
-                            
                         }
 
                     }
                 }
                 
             }
+            else if(Canvas.GetBottom(player) < level) 
+            { Canvas.SetBottom(player, level); 
+            }
+            else
+            {
+                
+                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())//checks for collision, if the player is next to block and tries moving into it, cancels the movement
+                {
+                    if ((collCheck.Tag as string)[0] == 'G')
+                    {
+                        if((Canvas.GetLeft(collCheck)==Canvas.GetLeft(player)+Size)&&(Canvas.GetBottom(player)==Canvas.GetBottom(collCheck)))
+                        {
+                            return;
+                        }
+                    }
+                }
+                    Animation(Canvas.GetLeft(player), Canvas.GetLeft(player)+100, Canvas.GetBottom(player), Canvas.GetBottom(player), true);
+                    
+            }
+            
+        }
+
+       double ts = 0;
+        public void FallGravity(object sender, EventArgs e)
+        {
+            
+            foreach(var collCheck in MyCan.Children.OfType<Rectangle>())
+            {
+                if((collCheck.Tag as string)[0] == 'G')
+                {
+                    if((Canvas.GetBottom(collCheck)==Canvas.GetBottom(player)-Size)&&(Canvas.GetLeft(player)==Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
+                    {
+                        
+                        return;
+                    }
+                }
+            }
+
+            
+            Canvas.SetBottom(player, level-Size);
+            test.Content += "x";
+            move.Completed -= FallGravity;
             
 
-            //FallGravity();
+
 
 
         }
 
-       double ts = 0;
-        public void FallGravity()
-        {
-            
-
-            
-            
-            //if ((Canvas.GetBottom(player) % 100 != 0) || (Canvas.GetBottom(player) != 0))
-            //{
-            //    for (int i = 0; i < 20; i++)
-            //    {
-            //        if (((i + 1) * 100) > (Canvas.GetBottom(player)) && ((Canvas.GetBottom(player) > i * 100)))
-            //        {
-            //            Canvas.SetBottom(player, i * 100);
-            //            break;
-            //        }
-            //    }
-            //}
-
-
-            //foreach(var collCheck in MyCan.Children.OfType<Rectangle>())
-            //{
-            //    if((collCheck.Tag as string)[0] == 'G' )
-            //    {
-            //        if((Canvas.GetBottom(collCheck)+Size == Canvas.GetBottom(player))&&(Canvas.GetLeft(collCheck) == (Canvas.GetLeft(player))))
-            //        {
-
-            //            return;
-            //        }
-            //    }
-            //}
-
-            //level -= 100;
-
-            //ts = Canvas.GetBottom(player);
-            //test_Copy.Content = ts;
 
 
 
-
-        }        
-
+        #region working
         public void cooldown()
         {
             jumping = false;
 
             CD = true;
-            test.Background = Brushes.Red;
+            
             coolDown.Interval = new TimeSpan(0, 0, 0, 0, 500);
             coolDown.Start();
             coolDown.Tick += (sender, e) =>
             {
-                CD = false;
-                test.Background = Brushes.Blue;
+                CD = false;               
                 coolDown.Stop();
             };
         }
@@ -324,14 +294,14 @@ namespace Projekt
             {
 
 
-                //Rectangle bedrock = new Rectangle();
-                //bedrock.Fill = Brushes.DarkGray;
-                //bedrock.Width = 100;
-                //bedrock.Height = 100;
-                //bedrock.Tag = "GY";
-                //Canvas.SetBottom(bedrock, -100);
-                //Canvas.SetLeft(bedrock, i * 100);
-                //MyCan.Children.Add(bedrock);
+                Rectangle bedrock = new Rectangle();
+                bedrock.Fill = Brushes.DarkGray;
+                bedrock.Width = 100;
+                bedrock.Height = 100;
+                bedrock.Tag = "GY";
+                Canvas.SetBottom(bedrock, -100);
+                Canvas.SetLeft(bedrock, i * 100);
+                MyCan.Children.Add(bedrock);
                 
                 if (i>5) 
                 {
@@ -355,3 +325,4 @@ namespace Projekt
         
     }
 }
+#endregion
