@@ -36,25 +36,18 @@ namespace Projekt
 
     public partial class MainWindow : Window
     {
-        int ttt = 0;
+        
        
-        public bool D = false;
-        public bool A = false;
+        
         public bool CD = false;
         bool tess = false;
-        public int Span = 200;
         public double Size = 100d;
         public double level = 100;
         public bool jumping =false;
-
+        DispatcherTimer coolDown= new DispatcherTimer();// 
         
+        Storyboard move = new Storyboard();//create storyboard for animating
 
-
-        DispatcherTimer coolDown= new DispatcherTimer();
-        //create storyboard
-        Storyboard move = new Storyboard();
-        double maxHeight = 0.0;
-        double maxRight = 0.0;
 
         public bool blockedY = false;
         public MainWindow()
@@ -70,7 +63,7 @@ namespace Projekt
             #region keys
             this.KeyDown += (s, e) =>
             {
-                test.Content = Canvas.GetBottom(player) +" " + level+" "+ Canvas.GetLeft(player);
+                test.Content = Canvas.GetLeft(player);
                 switch (e.Key)
                     {
                         case Key.Space:
@@ -78,13 +71,11 @@ namespace Projekt
                             
                             break;
                         case Key.D:
-                            D = true;
-                            A = false;
+                            
                             Right();
                             break;
                         case Key.A:
-                            A = true;
-                            D = false;
+                            Left();
                             break;
                     }
                 
@@ -129,8 +120,8 @@ namespace Projekt
         public void JumpGravityCompleted(object sender, EventArgs e)
         {
             move.Completed -= JumpGravityCompleted;
-            cooldown();
-            //FallGravity();
+            cooldown(new object() ,new EventArgs());
+            
         }
         #endregion
         public void Animation(double x1, double x2, double y1, double y2,bool Grav)
@@ -224,7 +215,8 @@ namespace Projekt
             }
             else
             {
-                
+                if (CD) { return; }
+                cooldown(new object(), new EventArgs());
                 foreach (var collCheck in MyCan.Children.OfType<Rectangle>())//checks for collision, if the player is next to block and tries moving into it, cancels the movement
                 {
                     if ((collCheck.Tag as string)[0] == 'G')
@@ -237,11 +229,81 @@ namespace Projekt
                 }
                     Animation(Canvas.GetLeft(player), Canvas.GetLeft(player)+100, Canvas.GetBottom(player), Canvas.GetBottom(player), true);
                     
+                    
             }
             
         }
 
-       double ts = 0;
+
+        public void Left()//movement Left
+        {
+
+
+            if (Canvas.GetBottom(player) > level)
+            {
+                foreach (var collCheck in MyCan.Children.OfType<Rectangle>()) //checks for collision, if the player is next to block and tries moving into it, cancels the movement
+                {
+                    if ((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) - Size) && (level + Size == Canvas.GetBottom(collCheck)))//checks if there is a block on the "desired position"
+                    {
+                        return;
+                    }
+                }
+                foreach (var control in MyCan.Children.OfType<Rectangle>()) //if there is a block 1 higher and to the right, moves to it
+                {
+                    if ((control.Tag as string)[0] == 'G')
+                    {
+                        if ((Canvas.GetLeft(control) == Canvas.GetLeft(player)-Size) && (level == Canvas.GetBottom(control)))//checks if there is a block on the "desired position"
+                        {
+                            tess = true;
+
+                            JumpGravityCompleted(new object(), new EventArgs());
+                            move.Stop();
+                            // Canvas.SetBottom(player, level+Size);
+                            test.Content += "x";
+                            //Canvas.SetLeft(player, Canvas.GetLeft(control));
+
+                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(control), Canvas.GetBottom(player), level + Size, true);
+                            level += 100;
+                            tess = false;
+                            return;
+                        }
+
+                    }
+                }
+
+            }
+            else if (Canvas.GetBottom(player) < level)
+            {
+                Canvas.SetBottom(player, level);
+            }
+            else
+            {
+                if (CD) { return; }
+                cooldown(new object(), new EventArgs());
+                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())//checks for collision, if the player is next to block and tries moving into it, cancels the movement
+                {
+                    if ((collCheck.Tag as string)[0] == 'G')
+                    {
+                        if ((Canvas.GetLeft(collCheck) == Canvas.GetLeft(player) - Size) && (Canvas.GetBottom(player) == Canvas.GetBottom(collCheck)))
+                        {
+                            return;
+                        }
+                    }
+                }
+                Animation(Canvas.GetLeft(player), Canvas.GetLeft(player) - 100, Canvas.GetBottom(player), Canvas.GetBottom(player), true);
+                
+            }
+
+        }
+
+
+
+
+
+
+
+
+        double ts = 0;
         public void FallGravity(object sender, EventArgs e)
         {
             
@@ -270,6 +332,7 @@ namespace Projekt
                             player.Fill = Brushes.Yellow;
 
                             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false);
+                            move.Completed += levelCheck;
                             return;
 
                         }
@@ -277,19 +340,20 @@ namespace Projekt
                     }
                 }
             }
-          
 
+        }
 
-
-
-
+        public void levelCheck(object sender, EventArgs e)
+        {
+            level = Canvas.GetBottom(player);
+            move.Completed -= levelCheck;
         }
 
 
 
 
         #region working
-        public void cooldown()
+        public void cooldown(object sender, EventArgs e)
         {
             jumping = false;
 
@@ -299,8 +363,10 @@ namespace Projekt
             coolDown.Start();
             coolDown.Tick += (sender, e) =>
             {
-                CD = false;               
+                CD = false;
+                move.Completed -= cooldown;
                 coolDown.Stop();
+                
             };
         }
 
