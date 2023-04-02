@@ -42,7 +42,7 @@ namespace Projekt
         public bool CD = false;
         bool tess = false;
         public double Size = 100d;
-        public double level = 100;
+        public double level = 120;
         public bool jumping =false;
         DispatcherTimer coolDown= new DispatcherTimer();// 
         
@@ -60,10 +60,11 @@ namespace Projekt
             JumpGravity();
             Right();
 
+           
             #region keys
             this.KeyDown += (s, e) =>
             {
-                test.Content = Canvas.GetLeft(player);
+               
                 switch (e.Key)
                     {
                         case Key.Space:
@@ -78,6 +79,7 @@ namespace Projekt
                             Left();
                             break;
                     }
+                test.Content = Canvas.GetLeft(player);
                 
             };
             
@@ -231,7 +233,8 @@ namespace Projekt
                     
                     
             }
-            
+            if (Canvas.GetLeft(player) > 1400) { ShiftScreen(2); }
+
         }
 
 
@@ -293,6 +296,8 @@ namespace Projekt
                 Animation(Canvas.GetLeft(player), Canvas.GetLeft(player) - 100, Canvas.GetBottom(player), Canvas.GetBottom(player), true);
                 
             }
+
+            if(Canvas.GetLeft(player) < 100){ ShiftScreen(1); }
 
         }
 
@@ -359,7 +364,7 @@ namespace Projekt
 
             CD = true;
             
-            coolDown.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            coolDown.Interval = new TimeSpan(0, 0, 0, 0, 200);
             coolDown.Start();
             coolDown.Tick += (sender, e) =>
             {
@@ -390,7 +395,7 @@ namespace Projekt
                 bedrock.Width = 100;
                 bedrock.Height = 100;
                 bedrock.Tag = "GY";
-                Canvas.SetBottom(bedrock, -100);
+                Canvas.SetBottom(bedrock, -180);
                 Canvas.SetLeft(bedrock, i * 100);
                 MyCan.Children.Add(bedrock);
 
@@ -401,10 +406,10 @@ namespace Projekt
                     block.Width = 100;
                     block.Height = 100;
                     block.Tag = "GY";
-                    Canvas.SetBottom(block, 0);
+                    Canvas.SetBottom(block, 20);
                     Canvas.SetLeft(block, i * 100);
                     MyCan.Children.Add(block);
-                    if (i % 10 == 0) { block.Fill = Brushes.Green; }
+                    if (i % 2 == 0) { block.Fill = Brushes.Green; }
                 }
 
 
@@ -413,7 +418,10 @@ namespace Projekt
             }
         }
 
-        
+       public void ShiftScreen(byte direction)//0-left 1-right 2-down 3-up
+       {
+
+       }
     }
 }
 #endregion

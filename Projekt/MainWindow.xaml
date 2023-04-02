@@ -6,17 +6,35 @@
         xmlns:local="clr-namespace:Projekt"
         WindowStartupLocation="CenterOwner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}"
+        WindowState="Maximized"
+        WindowStyle="None"
+        Title="MainWindow" 
+       >
+
     <Canvas x:Name="MyCan">
-        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="500" Canvas.Bottom="00"></Rectangle>
-        <Rectangle x:Name="Ground"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="0" ></Rectangle>
-        <Rectangle x:Name="Ground_Copy1"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="0"  />
-        <Rectangle x:Name="Ground_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="100"/>
+        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="600" Canvas.Bottom="120"></Rectangle>
+        <Rectangle x:Name="Ground"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="20" ></Rectangle>
+        <Rectangle x:Name="Ground_Copy1"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="20"  />
         <Label x:Name="test" Width="100" Height="100" Canvas.Left="450" Canvas.Bottom="450"></Label>
-        <Rectangle x:Name="Ground_Copy2"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="800" Canvas.Bottom="00" />
-        <Rectangle x:Name="Ground_Copy3"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="700" Canvas.Bottom="0"   />
-        <Rectangle x:Name="Ground_Copy4"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="700" Canvas.Bottom="100" />
-        <Rectangle x:Name="Ground_Copy5"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="600" Canvas.Bottom="000"    />
+        <Rectangle x:Name="Ground_Copy3"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="700" Canvas.Bottom="20"   />
+        <Rectangle x:Name="Ground_Copy4"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="700" Canvas.Bottom="120" />
+        <Rectangle x:Name="Ground_Copy5"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="600" Canvas.Bottom="20"    />
+        <Rectangle x:Name="Ground_CoSpy5"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="800" Canvas.Bottom="220"    />
+        <Rectangle x:Name="Ground_CoSpSDy5"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="900" Canvas.Bottom="320"    />
+        <Rectangle x:Name="Ground_CoSpy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1000" Canvas.Bottom="420" />
+        <Rectangle x:Name="Ground_CoSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1100" Canvas.Bottom="520"   />
+        <Rectangle x:Name="Ground_CosSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1200" Canvas.Bottom="620"   />
+        <Rectangle x:Name="GrounDSd_CoSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1300" Canvas.Bottom="720"   />
+        <Rectangle x:Name="GrounDSDSd_CoSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1400" Canvas.Bottom="820"   />
+        <Rectangle x:Name="Ground_CoDSDSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1500" Canvas.Bottom="920"   />
+        <Rectangle x:Name="Ground_CoDSDSSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1600" Canvas.Bottom="1020"   />
+        <Rectangle x:Name="Ground_CDSDSDSpSDy5_Copy"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="1700" Canvas.Bottom="1120"   />
+
+
+
 
     </Canvas>
+
 </Window>
