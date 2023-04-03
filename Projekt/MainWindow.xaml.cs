@@ -123,6 +123,7 @@ namespace Projekt
         {
             move.Completed -= JumpGravityCompleted;
             cooldown(new object() ,new EventArgs());
+            move.Children.Clear();
             
         }
         #endregion
@@ -386,7 +387,7 @@ namespace Projekt
         public void Generate()
         {
             MessageBox.Show("x");
-            for(int i=0; i<100; i++)
+            for(int i=0; i<300; i++)
             {
 
 
