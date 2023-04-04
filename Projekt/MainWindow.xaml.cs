@@ -28,10 +28,10 @@ namespace Projekt
     /// 
 
 
-    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False) 
+    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False)  [2] - U - Ubreakable (U-true,_-false)
 
 
-    //TODO: Movement cooldown, Movement left.
+    //TODO: Screen shift down and up - Breaking and Resources
 
 
     public partial class MainWindow : Window
@@ -41,6 +41,7 @@ namespace Projekt
         int leftScreen = 1;
         public bool CD = false;
         bool tess = false;
+        bool down = false;
         public double Size = 100d;
         public double level = 120;
         public bool jumping = false;
@@ -64,7 +65,7 @@ namespace Projekt
             #region keys
             this.KeyDown += (s, e) =>
             {
-
+                if(down == true) { return; }
                 switch (e.Key)
                 {
                     case Key.Space:
@@ -80,8 +81,16 @@ namespace Projekt
                         break;
                 }
                 test.Content = Canvas.GetLeft(player);
+                down = true;
 
             };
+
+            this.KeyUp += (s, e) => 
+            {
+                down = false;
+            };
+
+            
 
 
         }
@@ -388,33 +397,83 @@ namespace Projekt
 
         public void Generate()
         {
-            MessageBox.Show("x");
-            for (int i = -10; i < 300; i++)
+            Random rnd = new Random();
+            string SeedPlus = "";
+            for (int i = 0; i < 101; i++)
             {
-
-
-                Rectangle bedrock = new Rectangle();
-                bedrock.Fill = Brushes.DarkGray;
-                bedrock.Width = 100;
-                bedrock.Height = 100;
-                bedrock.Tag = "GY";
-                Canvas.SetBottom(bedrock, -180);
-                Canvas.SetLeft(bedrock, i * 100);
-                MyCan.Children.Add(bedrock);
-
                 
-                    Rectangle block = new Rectangle();
-                    block.Fill = Brushes.Brown;
-                    block.Width = 100;
-                    block.Height = 100;
-                    block.Tag = "GY";
-                    Canvas.SetBottom(block, 20);
-                    Canvas.SetLeft(block, i * 100);
-                    MyCan.Children.Add(block);
-                    if (i % 2 == 0) { block.Fill = Brushes.Green; }
-                
+                SeedPlus += rnd.Next(0, 10);
+            }
+            test.Content = SeedPlus;
+
+
+
+
+
+            for (int i = -100; i < 100; i++)
+            {
+                for(int j = 2; j < 40; j++)
+                {
+
+                    Rectangle stone = new Rectangle();
+                    stone.Width = 100;
+                    stone.Height = 100;
+                    stone.Tag = "GY";
+
+                    if (SeedPlus[Math.Abs(i)] == '1')
+                    {
+                        stone.Fill = new ImageBrush { ImageSource=new BitmapImage(new Uri("pack://application:,,,/Images/Ores/copper.png"))};
+                    }
+                    else if((SeedPlus[Math.Abs(i)] == '2')&&(j >25))
+                    {
+                        stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
+                    }
+                    else if ((SeedPlus[Math.Abs(i)] == '3') && (j > 15))
+                    {
+                        stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
+                    }
+                    else
+                    {
+                        stone.Fill = Brushes.Gray;
+
+                    }
+                    MyCan.Children.Add(stone);
+                    Canvas.SetLeft(stone, 100 * i);
+                    Canvas.SetBottom(stone, -80 * j);
+
+
+
+
+
+
+
+
+                }
+                Rectangle baseDirt = new Rectangle();
+                baseDirt.Width = 100;
+                baseDirt.Height = 100;
+                baseDirt.Fill = Brushes.Brown;
+                baseDirt.Tag = "GY";
+                baseDirt.Name = "Dirt";
+                Canvas.SetLeft(baseDirt, 100 * i);
+                Canvas.SetBottom(baseDirt, -80);
+                MyCan.Children.Add(baseDirt);
+
+                Rectangle Bedrock = new Rectangle();
+                Bedrock.Width = 100;
+                Bedrock.Height = 100;
+                Bedrock.Fill = Brushes.Black;
+                Bedrock.Tag = "GYU";
+                Bedrock.Name = "Bedrock";
+                Canvas.SetLeft(Bedrock, 100 * i);
+                Canvas.SetBottom(Bedrock, -80*41);
+                MyCan.Children.Add(Bedrock);
 
             }
+            
+                
+
+            
         }
 
         public void ShiftScreen(byte direction)//0-left 1-right 2-down 3-up
