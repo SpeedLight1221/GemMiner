@@ -39,7 +39,7 @@ namespace Projekt
 
 
         int leftScreen = 1;
-        public char facing = 'l';//l-left r-right t-top d-down
+        public char facing = 'd';//l-left r-right t-top d-down
         public bool CD = false;
         bool tess = false;
         bool down = false;
@@ -442,11 +442,12 @@ namespace Projekt
                         };
                         breaktimer.Start();
                     }
-                    else if ((facing == 'd') && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player) - 100) && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)))
+                    else if ((facing == 'd') && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player) - 100) && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)))
                     {
                         breaktimer.Tick += (s, e) =>
                         {
                             MyCan.Children.Remove(breakCheck);
+                            FallGravity(new object(), new EventArgs());
                             
                         };
                         breaktimer.Start();
