@@ -39,6 +39,7 @@ namespace Projekt
 
 
         int leftScreen = 1;
+        public char facing = 'l';//l-left r-right t-top d-down
         public bool CD = false;
         bool tess = false;
         bool down = false;
@@ -46,6 +47,9 @@ namespace Projekt
         public double level = 120;
         public bool jumping = false;
         DispatcherTimer coolDown = new DispatcherTimer();// 
+
+        DispatcherTimer breaktimer = new DispatcherTimer();
+        
 
         Storyboard move = new Storyboard();//create storyboard for animating
 
@@ -60,10 +64,10 @@ namespace Projekt
             ts = Canvas.GetBottom(player);
             JumpGravity();
             Right();
-
+            breaktimer.Interval = new TimeSpan(0, 0, 0, 2);
 
             #region keys
-            this.KeyDown += (s, e) =>
+            this.KeyDown += (s, e) => //movement keys
             {
                 if(down == true) { return; }
                 switch (e.Key)
@@ -79,18 +83,33 @@ namespace Projekt
                     case Key.A:
                         Left();
                         break;
+                    
                 }
                 test.Content = Canvas.GetLeft(player);
                 down = true;
 
             };
 
+
             this.KeyUp += (s, e) => 
             {
                 down = false;
+
+
+                breaktimer.Stop();
             };
 
-            
+            this.MouseLeftButtonDown += (s, e) => //mouse btns
+            {
+                Break();
+            };
+
+            this.MouseLeftButtonUp += (s, e) => //mouse btns
+            {
+                breaktimer.Stop();
+            };
+
+
 
 
         }
@@ -389,6 +408,57 @@ namespace Projekt
 
 
 
+        #region break
+        public void Break()
+        {
+            
+
+            foreach (var breakCheck in MyCan.Children.OfType<Rectangle>())
+            {
+                if((breakCheck.Tag as string)[0] != 'U')
+                {
+                    if((facing == 'l')&&(Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)-100)&&(Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player)))
+                    {
+                        breaktimer.Tick += (s, e) =>
+                        {
+                            MyCan.Children.Remove(breakCheck);
+                            test2.Content = Canvas.GetLeft(breakCheck);
+                        };
+                        breaktimer.Start();
+                    }
+                    else if ((facing == 'r') && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player) +100) && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player)))
+                    {
+                        breaktimer.Tick += (s, e) =>
+                        {
+                            MyCan.Children.Remove(breakCheck);
+                        };
+                        breaktimer.Start();
+                    }
+                    else if ((facing == 't') && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player) + 100)&& (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)))
+                    {
+                        breaktimer.Tick += (s, e) =>
+                        {
+                            MyCan.Children.Remove(breakCheck);
+                        };
+                        breaktimer.Start();
+                    }
+                    else if ((facing == 'd') && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player) - 100) && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)))
+                    {
+                        breaktimer.Tick += (s, e) =>
+                        {
+                            MyCan.Children.Remove(breakCheck);
+                            
+                        };
+                        breaktimer.Start();
+                    }
+                }
+            }
+        }
+
+
+
+        #endregion
+
 
 
 
@@ -418,7 +488,7 @@ namespace Projekt
                     Rectangle stone = new Rectangle();
                     stone.Width = 100;
                     stone.Height = 100;
-                    stone.Tag = "GY";
+                    stone.Tag = "GY_";
 
                     if (SeedPlus[Math.Abs(i)] == '1')
                     {
@@ -453,7 +523,7 @@ namespace Projekt
                 baseDirt.Width = 100;
                 baseDirt.Height = 100;
                 baseDirt.Fill = Brushes.Brown;
-                baseDirt.Tag = "GY";
+                baseDirt.Tag = "GY_";
                 baseDirt.Name = "Dirt";
                 Canvas.SetLeft(baseDirt, 100 * i);
                 Canvas.SetBottom(baseDirt, -80);
