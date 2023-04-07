@@ -9,6 +9,7 @@
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
         Height="{x:Static SystemParameters.PrimaryScreenHeight}"
         WindowState="Maximized"
+        WindowStyle="None"
         
         Title="MainWindow" 
        >
