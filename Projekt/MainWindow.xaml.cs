@@ -51,7 +51,7 @@ namespace Projekt
         Rectangle toBreak = null;
 
         DispatcherTimer breaktimer = new DispatcherTimer();
-
+        
 
         Storyboard move = new Storyboard();//create storyboard for animating
         Rectangle selector = new Rectangle();
@@ -68,14 +68,14 @@ namespace Projekt
             Right();
             breaktimer.Interval = new TimeSpan(0, 0, 0, 2);
 
-
+            
             selector.Width = 100;
             selector.Height = 100;
-            selector.Fill = new SolidColorBrush((Color.FromArgb(128, 128, 128, 128)));
+            selector.Fill = new SolidColorBrush((Color.FromArgb(128, 20, 20, 220)));
             MyCan.Children.Add(selector);
             Canvas.SetLeft(selector, Canvas.GetLeft(player) + 100);
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
-            selector.Tag = "_______";
+            selector.Tag = "__U____";
 
             #region keys
             this.KeyDown += (s, e) => //movement keys
@@ -86,35 +86,24 @@ namespace Projekt
                     case Key.Space:
                         Jump();
 
-                        break;
+                        break; 
                     case Key.D:
 
                         Right();
-                        facing = 'r';//move selector
+                        
                         
 
                         break;
                     case Key.A:
                         Left();
-                        facing = 'l';
                         break;
-                    case Key.Down:
-                        facing = 'd';
-                        break;
-                    case Key.Up:
-                        facing = 'u';
-                        break;
-                    case Key.Left:
-                        facing = 'l';
-                        break;
-                    case Key.Right:
-                        facing = 'r';
-                        break;
+                        
+               
 
                 }
                 test.Content = Canvas.GetLeft(player);
                 down = true;
-
+                
             };
 
 
@@ -128,6 +117,7 @@ namespace Projekt
 
             this.MouseLeftButtonDown += (s, e) => //mouse btns
             {
+                
                 Break();
             };
 
@@ -135,6 +125,22 @@ namespace Projekt
             {
                 breaktimer.Stop();
                 toBreak = null;
+            };
+
+            this.MouseMove += (s, e) =>
+            {
+                double X = Mouse.GetPosition(player).X;
+                double Y = Mouse.GetPosition(player).Y;
+                if ((X < 0) && (Y < 0)) {  Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); } //top left
+                else if ((X>100) && (Y<0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }  //top right
+                else if ((X < 0) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player)- 100)); } //bottom left
+                else if ((X > 100) && (Y> 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }  //bottom right
+                else if ((X<0)&&((0<Y))&&(Y<100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//left
+                else if ((X > 100) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//right
+                else if (((0 < X)) && (X < 100)&& (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player)+100)); }//top
+                else if (((0 < X)) && (X < 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player)-100)); }//top
+
+
             };
 
 
@@ -219,7 +225,8 @@ namespace Projekt
 
                 Canvas.SetLeft(player, x2);
                 Canvas.SetBottom(player, y2);
-                //MoveSelector();
+                
+
             };
 
 
@@ -370,29 +377,7 @@ namespace Projekt
 
 
 
-        public void MoveSelector()
-        {
-            if (facing == 'd')
-            {
-                Canvas.SetLeft(selector, Canvas.GetLeft(player));
-                Canvas.SetBottom(selector, Canvas.GetBottom(player) - 100);
-            }
-            else if (facing == 't')
-            {
-                Canvas.SetLeft(selector, Canvas.GetLeft(player));
-                Canvas.SetBottom(selector, Canvas.GetBottom(player) + 100);
-            }
-            else if (facing == 'l')
-            {
-                Canvas.SetLeft(selector, Canvas.GetLeft(player) - 100);
-                Canvas.SetBottom(selector, Canvas.GetBottom(player));
-            }
-            else if (facing == 'd')
-            {
-                Canvas.SetLeft(selector, Canvas.GetLeft(player));
-                Canvas.SetBottom(selector, Canvas.GetBottom(player) + 100);
-            }
-        }
+      
 
 
 
@@ -426,7 +411,7 @@ namespace Projekt
 
                             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false, 0.4);
                             move.Completed += levelCheck;
-                            if (Canvas.GetBottom(player) < 20) { ShiftScreen(2); }
+                            if (Canvas.GetBottom(player) < 120) { ShiftScreen(2); }
                             return;
 
                         }
@@ -473,24 +458,13 @@ namespace Projekt
 
             foreach (var breakCheck in MyCan.Children.OfType<Rectangle>())
             {
-                if ((breakCheck.Tag as string)[0] != 'U')
+                if ((breakCheck.Tag as string)[2] != 'U')
                 {
-                    if ((facing == 'l') && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player) - 100) && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player)))
+                    if ((Canvas.GetLeft(breakCheck) == Canvas.GetLeft(selector))&& (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(selector)))
                     {
                         toBreak = breakCheck;
                     }
-                    else if ((facing == 'r') && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player) + 100) && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player)))
-                    {
-                        toBreak = breakCheck;
-                    }
-                    else if ((facing == 't') && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player) + 100) && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)))
-                    {
-                        toBreak = breakCheck;
-                    }
-                    else if ((facing == 'd') && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(player) - 100) && (Canvas.GetLeft(breakCheck) == Canvas.GetLeft(player)))
-                    {
-                        toBreak = breakCheck;
-                    }
+                
                 }
             }
 
@@ -515,7 +489,7 @@ namespace Projekt
 
 
 
-
+    
 
 
 
@@ -526,7 +500,7 @@ namespace Projekt
             for (int i = 0; i < 101; i++)
             {
 
-                SeedPlus += rnd.Next(0, 10);
+                SeedPlus += Convert.ToString(rnd.Next(0, 10));
             }
             test.Content = SeedPlus;
 

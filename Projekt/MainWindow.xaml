@@ -15,13 +15,14 @@
        >
 
     <Canvas x:Name="MyCan">
-        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="600" Canvas.Bottom="120"></Rectangle>
-        <Rectangle x:Name="Ground"  Tag="GY_"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="20" ></Rectangle>
-        <Rectangle x:Name="Ground_Copy1"  Tag="GY_"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="20"  />
+        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="600" Canvas.Bottom="120">
+           
+        </Rectangle>
+        <Rectangle x:Name="Ground"  Tag="GY_____"  Width="100" Height="100" Fill="Brown" Canvas.Left="0" Canvas.Bottom="20" ></Rectangle>
+        <Rectangle x:Name="Ground_Copy1"  Tag="GY___"  Width="100" Height="100" Fill="Brown" Canvas.Left="100" Canvas.Bottom="20"  />
         <Label x:Name="test" Width="100" Height="100" Canvas.Left="450" Canvas.Bottom="450"></Label>
-        <Rectangle x:Name="Ground_Copy3"  Tag="GY_"  Width="100" Height="100" Fill="Brown" Canvas.Left="700" Canvas.Bottom="20"   />
-        <Rectangle x:Name="Ground_Copy5"  Tag="GY_"  Width="100" Height="100" Fill="Brown" Canvas.Left="600" Canvas.Bottom="20"    />
-        <Rectangle x:Name="Ore"  Tag="GY"  Width="100" Height="100" Fill="Brown" Canvas.Left="500" Canvas.Bottom="20" />
+        <Rectangle x:Name="Ground_Copy3"  Tag="GY____"  Width="100" Height="100" Fill="Brown" Canvas.Left="700" Canvas.Bottom="20"   />
+        <Rectangle x:Name="Ground_Copy5"  Tag="GY____"  Width="100" Height="100" Fill="Brown" Canvas.Left="600" Canvas.Bottom="20"    />
         <Label x:Name="test2" Background="AliceBlue" Width="100" Height="100" Canvas.Left="784" Canvas.Bottom="450" Canvas.Top="241"></Label>
 
 
