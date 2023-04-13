@@ -17,4 +17,8 @@
     <Resource Include="Images\Ores\Iron.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\Icons\" />
+  </ItemGroup>
+
 </Project>

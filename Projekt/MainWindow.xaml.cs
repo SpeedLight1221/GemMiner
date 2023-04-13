@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,18 +33,24 @@ namespace Projekt
     // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False)  [2] - U - Ubreakable (U-true,_-false)
 
 
-    //TODO: Screen shift down and up - Breaking and Resources
+    //TODO: Screen shift  up - Resources
 
 
     public partial class MainWindow : Window
     {
 
 
+        public List<Item> InventoryList = new List<Item>();
+
+        public bool ShiftCD = false;
         int leftScreen = 1;
         public char facing = 'd';//l-left r-right t-top d-down
         public bool CD = false;
         bool tess = false;
         bool down = false;
+
+        public bool blockMove = false;
+
         public double Size = 100d;
         public double level = 120;
         public bool jumping = false;
@@ -51,7 +58,8 @@ namespace Projekt
         Rectangle toBreak = null;
 
         DispatcherTimer breaktimer = new DispatcherTimer();
-        
+
+       
 
         Storyboard move = new Storyboard();//create storyboard for animating
         Rectangle selector = new Rectangle();
@@ -60,16 +68,19 @@ namespace Projekt
         public MainWindow()
         {
             InitializeComponent();
-            Generate();
+
+            Generate();//Generates the world
+            
             level = Canvas.GetBottom(player);
 
             ts = Canvas.GetBottom(player);
-            JumpGravity();
-            Right();
-            breaktimer.Interval = new TimeSpan(0, 0, 0, 2);
+
+            JumpGravity();//calls jumpgravity  in order to avoid problems 
+            Right();// calls right in order to avoid problems
+            breaktimer.Interval = new TimeSpan(0, 0, 0, 2); //sets the interval for breaking blocks
 
             
-            selector.Width = 100;
+            selector.Width = 100; //creates the selector
             selector.Height = 100;
             selector.Fill = new SolidColorBrush((Color.FromArgb(128, 20, 20, 220)));
             MyCan.Children.Add(selector);
@@ -77,10 +88,23 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
+
+
+            Item alpha = new Item(5, "Alpha", new Uri("pack://application:,,,/Images/Ores/copper.png"));
+            InventoryList.Add(alpha);
+
             #region keys
             this.KeyDown += (s, e) => //movement keys
             {
                 if (down == true) { return; }
+
+
+                if(e.Key == Key.E)
+                {
+                    OpenInventory();
+                }
+
+                if(blockMove == true) { return; }
                 switch (e.Key)
                 {
                     case Key.Space:
@@ -101,7 +125,7 @@ namespace Projekt
                
 
                 }
-                test.Content = Canvas.GetLeft(player);
+                test.Content = Canvas.GetBottom(player);
                 down = true;
                 
             };
@@ -148,7 +172,9 @@ namespace Projekt
 
         }
 
+
         #endregion
+        #region working
 
         #region jump
         public void Jump()
@@ -186,6 +212,14 @@ namespace Projekt
             move.Completed -= JumpGravityCompleted;
             cooldown(new object(), new EventArgs());
             move.Children.Clear();
+
+            if(Canvas.GetBottom(player)>=820)
+            {
+                test.Background = Brushes.Red;
+                ShiftScreen(3);
+            }
+
+
 
         }
         #endregion
@@ -386,39 +420,39 @@ namespace Projekt
         {
 
 
-            foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
-            {
-                if ((collCheck.Tag as string)[0] == 'G')
-                {
-                    if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - Size) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
-                    {
-
-                        return;
-                    }
-                }
-            }
-
-
-            for (int i = 2; i < 12; i++)
-            {
                 foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                 {
                     if ((collCheck.Tag as string)[0] == 'G')
                     {
-                        if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
+                        if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - Size) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
                         {
-                            player.Fill = Brushes.Yellow;
 
-                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false, 0.4);
-                            move.Completed += levelCheck;
-                            if (Canvas.GetBottom(player) < 120) { ShiftScreen(2); }
                             return;
-
                         }
-
                     }
                 }
-            }
+
+
+                for (int i = 2; i < 12; i++)
+                {
+                    foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                    {
+                        if ((collCheck.Tag as string)[0] == 'G')
+                        {
+                            if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
+                            {
+                                player.Fill = Brushes.Yellow;
+
+                                Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false, 0.4);
+                                move.Completed += levelCheck;
+                                if (Canvas.GetBottom(player) < 120) { ShiftScreen(2); }
+                                return;
+
+                            }
+
+                        }
+                    }
+                }
 
         } // ensures that the player falls when they move 
 
@@ -431,7 +465,7 @@ namespace Projekt
 
 
 
-        #region working
+        
         public void cooldown(object sender, EventArgs e)
         {
             jumping = false;
@@ -503,6 +537,19 @@ namespace Projekt
                 SeedPlus += Convert.ToString(rnd.Next(0, 10));
             }
             test.Content = SeedPlus;
+
+            //for(int i=1; i < 20; i++)
+            //{
+            //    Rectangle baseDirt = new Rectangle();
+            //    baseDirt.Width = 100;
+            //    baseDirt.Height = 100;
+            //    baseDirt.Fill = Brushes.Brown;
+            //    baseDirt.Tag = "GY_";
+            //    baseDirt.Name = "Dirt";
+            //    Canvas.SetLeft(baseDirt, 100 * i);
+            //    Canvas.SetBottom(baseDirt,( 100 * i)+20);
+            //    MyCan.Children.Add(baseDirt);
+            //}
 
 
 
@@ -576,40 +623,83 @@ namespace Projekt
 
         public void ShiftScreen(byte direction)//0-left 1-right 2-down 3-up
         {
-            if (direction == 1)//right
+            if (ShiftCD == false)
             {
-                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                if (direction == 1)//right
                 {
+                    foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                    {
 
-                    Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) - 1500);
+                        Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) - 1500);
 
 
+
+                    }
+                    Animation(Canvas.GetLeft(player), 0, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
+                }
+                else if (direction == 0)//left
+                {
+                    foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                    {
+
+                        Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) + 1500);
+
+                    }
+                    Animation(Canvas.GetLeft(player), 1400, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
 
                 }
-                Animation(Canvas.GetLeft(player), 0, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
-            }
-            else if (direction == 0)//left
-            {
-                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                else if (direction == 2)//down
                 {
+                    
+                    Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 820, true, 0.2);
+                    foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                    {
+                        
+                        Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) + 800);
 
-                    Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) + 1500);
-
+                    }
+                    
                 }
-                Animation(Canvas.GetLeft(player), 1400, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
-
-            }
-            else if (direction == 2)//down
-            {
-                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                else if (direction == 3)
                 {
+                    
+                    foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                    {
 
-                    Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) + 1100);
+                        if (collCheck.Name != "player")
+                        {
+                            Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 800);
+                        }
+                        else
+                        {
+                           
+                        }
+                        
 
+                    }
+                    
+
+                   
                 }
-                Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 1020, true, 0.2);
             }
+        }
+        #endregion
+
+
+
+
+        void OpenInventory()
+        {
+            Inventory Inv = new Inventory(InventoryList);
+            blockMove = true;
+            Inv.Show();
+
+            Inv.Closed += (s, e) =>
+            {
+                blockMove = false;
+            };
+
         }
     }
 }
-#endregion
+
