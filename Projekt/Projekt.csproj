@@ -8,17 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Icons\copper.png" />
     <None Remove="Images\Ores\copper.png" />
     <None Remove="Images\Ores\Iron.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Icons\copper.png" />
     <Resource Include="Images\Ores\copper.png" />
     <Resource Include="Images\Ores\Iron.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Images\Icons\" />
   </ItemGroup>
 
 </Project>

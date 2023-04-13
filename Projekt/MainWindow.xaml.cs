@@ -30,7 +30,7 @@ namespace Projekt
     /// 
 
 
-    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False)  [2] - U - Ubreakable (U-true,_-false)
+    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False)  [2] - U - Ubreakable (U-true,_-false) [3] resource type (D-dirt,S-stone)
 
 
     //TODO: Screen shift  up - Resources
@@ -89,8 +89,8 @@ namespace Projekt
             selector.Tag = "__U____";
 
 
-
-            Item alpha = new Item(5, "Alpha", new Uri("pack://application:,,,/Images/Ores/copper.png"));
+            string x = "copper";
+            Item alpha = new Item(5, "Alpha", new Uri($"pack://application:,,,/Images/Ores/{x}.png"));
             InventoryList.Add(alpha);
 
             #region keys
@@ -507,6 +507,12 @@ namespace Projekt
                 if(toBreak != null)
                 {
                     MyCan.Children.Remove(toBreak);
+
+
+
+                    AddToInventory(toBreak.Tag as string);
+
+
                     toBreak = null;
                     FallGravity(new object(),new EventArgs());
                     breaktimer.Stop();
@@ -521,7 +527,55 @@ namespace Projekt
 
         #endregion
 
+        // D- dirt S-stone C- copper T- tin I- iron
 
+        public void AddToInventory(string toAdd)
+        {
+            string itemName = "";
+            switch(toAdd[3])
+            {
+                case 'D':
+                    itemName = "Dirt";
+                    break;
+
+                case 'S':
+                    itemName = "Stone";
+                    break;
+
+                case 'C':
+                    itemName = "Copper";
+                    break;
+
+                case 'T':
+                    itemName = "Tin";
+                    break;
+
+                case 'I':
+                    itemName = "Iron";
+                    break;
+            }
+
+
+
+            foreach(Item i in InventoryList) //check if item of this type is already in inventory
+            {
+                if(i.Name == itemName)
+                {
+                    i.Amount++;
+                    return;
+                }
+                
+            }
+
+            Item ni = new Item(1, itemName, new Uri($"pack://application:,,,/Images/Icons/{itemName}.png"));
+            InventoryList.Add(ni);
+
+
+
+
+
+
+        }
 
     
 
@@ -568,14 +622,17 @@ namespace Projekt
                     if (SeedPlus[Math.Abs(i)] == '1')
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/copper.png")) };
+                        stone.Tag = "GY_C";
                     }
                     else if ((SeedPlus[Math.Abs(i)] == '2') && (j > 25))
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
+                        stone.Tag = "GY_T";
                     }
                     else if ((SeedPlus[Math.Abs(i)] == '3') && (j > 15))
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
+                        stone.Tag = "GY_I";
                     }
                     else
                     {
@@ -598,7 +655,7 @@ namespace Projekt
                 baseDirt.Width = 100;
                 baseDirt.Height = 100;
                 baseDirt.Fill = Brushes.Brown;
-                baseDirt.Tag = "GY_";
+                baseDirt.Tag = "GY_D";
                 baseDirt.Name = "Dirt";
                 Canvas.SetLeft(baseDirt, 100 * i);
                 Canvas.SetBottom(baseDirt, -80);
@@ -608,7 +665,7 @@ namespace Projekt
                 Bedrock.Width = 100;
                 Bedrock.Height = 100;
                 Bedrock.Fill = Brushes.Black;
-                Bedrock.Tag = "GYU";
+                Bedrock.Tag = "GYU_";
                 Bedrock.Name = "Bedrock";
                 Canvas.SetLeft(Bedrock, 100 * i);
                 Canvas.SetBottom(Bedrock, -80 * 41);
