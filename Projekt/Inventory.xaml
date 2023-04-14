@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Projekt"
         mc:Ignorable="d"
         Title="Inventory" Height="450" Width="450"
-         Opacity=".75"
+         Opacity=".85"
         WindowStartupLocation="CenterOwner"
         AllowsTransparency="True"
         WindowStyle="None"

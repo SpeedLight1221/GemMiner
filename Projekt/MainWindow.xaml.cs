@@ -77,7 +77,7 @@ namespace Projekt
 
             JumpGravity();//calls jumpgravity  in order to avoid problems 
             Right();// calls right in order to avoid problems
-            breaktimer.Interval = new TimeSpan(0, 0, 0, 2); //sets the interval for breaking blocks
+            breaktimer.Interval = new TimeSpan(0, 0, 0, 0,500); //sets the interval for breaking blocks
 
             
             selector.Width = 100; //creates the selector
@@ -167,7 +167,7 @@ namespace Projekt
 
             };
 
-
+            
 
 
         }
@@ -577,59 +577,59 @@ namespace Projekt
 
         }
 
-    
 
+        #endregion
 
 
         public void Generate()
         {
             Random rnd = new Random();
             string SeedPlus = "";
-            for (int i = 0; i < 101; i++)
+            for (int i = 0; i < 201; i++)
             {
 
                 SeedPlus += Convert.ToString(rnd.Next(0, 10));
             }
             test.Content = SeedPlus;
 
-            //for(int i=1; i < 20; i++)
-            //{
-            //    Rectangle baseDirt = new Rectangle();
-            //    baseDirt.Width = 100;
-            //    baseDirt.Height = 100;
-            //    baseDirt.Fill = Brushes.Brown;
-            //    baseDirt.Tag = "GY_";
-            //    baseDirt.Name = "Dirt";
-            //    Canvas.SetLeft(baseDirt, 100 * i);
-            //    Canvas.SetBottom(baseDirt,( 100 * i)+20);
-            //    MyCan.Children.Add(baseDirt);
-            //}
 
 
 
 
-
+            int k = 0;
             for (int i = -100; i < 100; i++)
             {
-                for (int j = 1; j < 40; j++)
+                
+                for (int j = 2; j < 40; j++)
                 {
 
+                    if(k+1 < SeedPlus.Length)
+                    {
+                        k++;
+                    }
+                    else
+                    {
+                        k = 0;
+                    }
+
+
+                    
                     Rectangle stone = new Rectangle();
                     stone.Width = 100;
                     stone.Height = 100;
-                    stone.Tag = "GY_";
+                    stone.Tag = "GY_S";
 
-                    if (SeedPlus[Math.Abs(i)] == '1')
+                    if ((SeedPlus[Math.Abs(k)] == '1')&& (k%2 ==0) && (j<25))
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/copper.png")) };
                         stone.Tag = "GY_C";
                     }
-                    else if ((SeedPlus[Math.Abs(i)] == '2') && (j > 25))
+                    else if ((SeedPlus[Math.Abs(k)] == '2') && (k % 2 == 0) && (j > 15))
                     {
-                        stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
+                        stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Tin.png")) };
                         stone.Tag = "GY_T";
                     }
-                    else if ((SeedPlus[Math.Abs(i)] == '3') && (j > 15))
+                    else if ((SeedPlus[Math.Abs(k)] == '3') && (k % 2 == 0) && (j > 25))
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
                         stone.Tag = "GY_I";
@@ -673,6 +673,82 @@ namespace Projekt
 
             }
 
+            #region valley
+
+            int offsetG = 0; // will be used to make the valley genarate on any point on map
+
+            //Generates a valley
+            int d = 0;// depth of the valley
+            int w = 0; //width of the valley
+            if (Convert.ToInt16(SeedPlus[k])>7)
+            {
+                d = 6;
+                w = 9;
+            }
+            else if (Convert.ToInt16(SeedPlus[k])>4)
+            {
+                d = 5;
+                w = 6;
+            }
+            else
+            {
+                d = 4;
+                w = 5;
+            }
+
+
+            List<Rectangle> toremove = new List<Rectangle>();
+
+            foreach (var removeCheck in MyCan.Children.OfType<Rectangle>())
+            {
+                int minW = 0; // changes the width for each layer
+                int maxW = 0;
+
+                for (int i = 0; i <= d; i++)
+                {
+                    for (int j = 0+ minW; j <= w-maxW; j++)
+                    {
+                       if(Canvas.GetBottom(removeCheck) == -80 - (100 * i))
+                        {
+                            if(Canvas.GetLeft(removeCheck) == j*100+500+offsetG)
+                            {
+                                toremove.Add(removeCheck);
+                            }
+                        }
+                    }
+                    if ((SeedPlus[i] == '6') || (SeedPlus[i] == '7')) //makes it so the valley isnt symmetric
+                    {
+                        minW += 0;
+                        maxW += 1;
+                    }
+                    else if (SeedPlus[i] == '4')
+                    {
+                        maxW += 2;
+                        minW += 1;
+                    }
+                    else
+                    {
+                        minW += 1;
+                        maxW += 1;
+                    }
+
+
+                }
+
+
+            }
+
+            foreach(Rectangle c in toremove)
+            {
+                test2.Content += (c.Tag as string) + "\n";
+                MyCan.Children.Remove(c);
+                
+            }
+           
+
+
+
+            #endregion
 
 
 
@@ -740,7 +816,7 @@ namespace Projekt
                 }
             }
         }
-        #endregion
+        
 
 
 
