@@ -420,9 +420,9 @@ namespace Projekt
         {
 
 
-                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
-                {
-                    if ((collCheck.Tag as string)[0] == 'G')
+            foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+            {
+                if (((collCheck.Tag as string)[0] == 'G') && ((collCheck.Tag as string)[0] != '_'))
                     {
                         if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - Size) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
                         {
@@ -437,7 +437,7 @@ namespace Projekt
                 {
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
-                        if ((collCheck.Tag as string)[0] == 'G')
+                        if (((collCheck.Tag as string)[0] == 'G')&& ((collCheck.Tag as string)[0] != '_'))
                         {
                             if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
                             {
@@ -494,11 +494,13 @@ namespace Projekt
             {
                 if ((breakCheck.Tag as string)[2] != 'U')
                 {
-                    if ((Canvas.GetLeft(breakCheck) == Canvas.GetLeft(selector))&& (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(selector)))
+                    if ((breakCheck.Tag as string)[0] != '_')
                     {
-                        toBreak = breakCheck;
+                        if ((Canvas.GetLeft(breakCheck) == Canvas.GetLeft(selector)) && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(selector)))
+                        {
+                            toBreak = breakCheck;
+                        }
                     }
-                
                 }
             }
 
@@ -712,7 +714,10 @@ namespace Projekt
                         {
                             if(Canvas.GetLeft(removeCheck) == j*100+500+offsetG)
                             {
-                                toremove.Add(removeCheck);
+                                if ((removeCheck.Tag as string)[0] != '_')
+                                {
+                                    toremove.Add(removeCheck);
+                                }
                             }
                         }
                     }
@@ -762,8 +767,11 @@ namespace Projekt
                 {
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
+                        if ((collCheck.Tag as string)[0] != '_')
+                        {
 
-                        Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) - 1500);
+                            Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) - 1500);
+                        }
 
 
 
@@ -774,8 +782,10 @@ namespace Projekt
                 {
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
-
-                        Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) + 1500);
+                        if ((collCheck.Tag as string)[0] != '_')
+                        {
+                            Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) + 1500);
+                        }
 
                     }
                     Animation(Canvas.GetLeft(player), 1400, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
@@ -787,8 +797,10 @@ namespace Projekt
                     Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 820, true, 0.2);
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
-                        
-                        Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) + 800);
+                        if ((collCheck.Tag as string)[0] != '_')
+                        {
+                            Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) + 800);
+                        }
 
                     }
                     
@@ -798,14 +810,19 @@ namespace Projekt
                     
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
+                        if ((collCheck.Tag as string)[0] != '_')
+                        {
 
-                        if (collCheck.Name != "player")
-                        {
-                            Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 800);
-                        }
-                        else
-                        {
-                           
+                            if (collCheck.Name != "player")
+                            {
+                                Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 800);
+                            }
+                            else
+                            {
+                                move.Stop();
+                                Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 100, true, 0.2);
+
+                            }
                         }
                         
 

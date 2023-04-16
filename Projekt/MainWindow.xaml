@@ -13,8 +13,18 @@
         
         Title="MainWindow" 
        >
+    
 
     <Canvas x:Name="MyCan">
+
+        <Rectangle x:Name="Primary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="20" Fill="Red">
+            
+        </Rectangle>
+        <Image x:Name="PrimImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="30"></Image>
+        <Rectangle x:Name="Secondary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="220" Fill="Red">
+
+        </Rectangle>
+        <Image x:Name="SecImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="230"></Image>
         <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="00" Canvas.Bottom="120">
            
         </Rectangle>
