@@ -13,14 +13,21 @@ namespace Projekt
         public string Name { get; set; }
         public Uri Image { get; set; }
 
+        public string type { get; set; }
 
 
-        public Item(int a,string n, Uri i)
+
+        public Item(int a,string n, Uri i,string t)
         {
             Amount = a;
             Name = n;
             Image = i;
+            type = t;
         }
+
+        public override string ToString()
+        {
+            return Name;        }
 
 
     }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Projekt
 {
@@ -19,6 +20,8 @@ namespace Projekt
     /// </summary>
     public partial class Inventory : Window
     {
+       public Item slot1 = null;
+        public Item slot2 = null;
         public Inventory( List<Item> inventory)
         {
             InitializeComponent();
@@ -31,10 +34,51 @@ namespace Projekt
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.E)
+            if(e.Key == Key.I)
             {
                 this.Close();
             }
+            else if (e.Key == Key.Q)
+            {
+                if ((InvList.SelectedItem as Item).type == "Tool")
+                {
+
+                    slot1 = InvList.SelectedItem as Item;
+                    Test.Content = slot1;
+                }
+                else
+                {
+                    Error();
+                }
+            }
+            else if (e.Key == Key.E)
+            {
+                if ((InvList.SelectedItem as Item).type == "Block")
+                {
+                    slot2 = InvList.SelectedItem as Item;
+                    Test.Content = slot2;
+                }
+            }
         }
+
+        public void Error()
+        {
+            DispatcherTimer flash = new DispatcherTimer();
+            flash.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            InvList.Background = Brushes.Red;
+
+            flash.Tick += (s, e) =>
+            {
+                InvList.Background = Brushes.Transparent;
+                flash.Stop();
+            };
+            flash.Start();
+
+
+        }
+
+      
+            
+        
     }
 }

@@ -12,16 +12,20 @@
         WindowStyle="None"
         KeyDown="Window_KeyDown">
     <Grid Background="Gray" >
+        <Label Background="Red" Height="50" x:Name="Test" RenderTransformOrigin="0.495,0.496"></Label>
         <ListView Background="Transparent" x:Name="InvList">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Height="50" Width="430" Background="DarkCyan" Opacity="1" >
                         <Image Source="{Binding Image}" Height="50" Width="50" ></Image>
-                        <TextBlock Text="{Binding Name}" Width="320" TextAlignment="Center" FontSize="30"></TextBlock>
+                        <TextBlock Text="{Binding Name}" Width="270" TextAlignment="Center" FontSize="30"></TextBlock>
                         <TextBlock Text="{Binding Amount}" Width="50" TextAlignment="Center" FontSize="40"></TextBlock>
+
+
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            
         </ListView>
     </Grid>
 </Window>

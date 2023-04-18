@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Images\Icons\copper.png" />
+    <None Remove="Images\Icons\dirt.png" />
     <None Remove="Images\Ores\copper.png" />
     <None Remove="Images\Ores\Iron.png" />
     <None Remove="Images\Ores\Tin.png" />
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <Resource Include="Images\Icons\copper.png" />
+    <Resource Include="Images\Icons\Dirt.png" />
     <Resource Include="Images\Ores\copper.png" />
     <Resource Include="Images\Ores\Iron.png" />
     <Resource Include="Images\Ores\Tin.png" />

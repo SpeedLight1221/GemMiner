@@ -38,7 +38,8 @@ namespace Projekt
 
     public partial class MainWindow : Window
     {
-
+        public Item Slot1;
+        public Item Slot2;
 
         public List<Item> InventoryList = new List<Item>();
 
@@ -78,8 +79,6 @@ namespace Projekt
             JumpGravity();//calls jumpgravity  in order to avoid problems 
             Right();// calls right in order to avoid problems
             breaktimer.Interval = new TimeSpan(0, 0, 0, 0,500); //sets the interval for breaking blocks
-
-            
             selector.Width = 100; //creates the selector
             selector.Height = 100;
             selector.Fill = new SolidColorBrush((Color.FromArgb(128, 20, 20, 220)));
@@ -88,10 +87,9 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
+           
 
-            string x = "copper";
-            Item alpha = new Item(5, "Alpha", new Uri($"pack://application:,,,/Images/Ores/{x}.png"));
-            InventoryList.Add(alpha);
+           
 
             #region keys
             this.KeyDown += (s, e) => //movement keys
@@ -99,7 +97,7 @@ namespace Projekt
                 if (down == true) { return; }
 
 
-                if(e.Key == Key.E)
+                if(e.Key == Key.I)
                 {
                     OpenInventory();
                 }
@@ -512,7 +510,7 @@ namespace Projekt
 
 
 
-                    AddToInventory(toBreak.Tag as string);
+                    AddToInventory(toBreak.Tag as string,"Block");
 
 
                     toBreak = null;
@@ -531,7 +529,7 @@ namespace Projekt
 
         // D- dirt S-stone C- copper T- tin I- iron
 
-        public void AddToInventory(string toAdd)
+        public void AddToInventory(string toAdd,string type)
         {
             string itemName = "";
             switch(toAdd[3])
@@ -569,7 +567,7 @@ namespace Projekt
                 
             }
 
-            Item ni = new Item(1, itemName, new Uri($"pack://application:,,,/Images/Icons/{itemName}.png"));
+            Item ni = new Item(1, itemName, new Uri($"pack://application:,,,/Images/Icons/{itemName}.png"),type);
             InventoryList.Add(ni);
 
 
@@ -844,12 +842,39 @@ namespace Projekt
             blockMove = true;
             Inv.Show();
 
+            Inv.Closing += (s, e) =>
+            {
+                EquipSlots(Inv.slot1, Inv.slot2);
+            };
+
+
             Inv.Closed += (s, e) =>
             {
                 blockMove = false;
             };
 
         }
+
+        public void EquipSlots(Item s1, Item s2)
+        {
+            if(s1 != null)
+            {
+                Slot1 = s1;
+                PrimImg.Source = new BitmapImage(Slot1.Image);
+            }
+
+            if (s2 != null)
+            {
+                Slot2 = s2;
+                SecImg.Source = new BitmapImage(Slot2.Image);
+            }
+        }
+
+        
+      
+
+
+        
     }
 }
 
