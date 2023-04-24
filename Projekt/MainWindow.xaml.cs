@@ -41,6 +41,10 @@ namespace Projekt
         public Item Slot1;
         public Item Slot2;
 
+        public List<Recipe> Recipes = new List<Recipe>();
+        public Recipe PH = new Recipe("ph", new Item(0, "h", new Uri($"pack://application:,,,/Images/Icons/0.png"), "None"), 0, "e",0, "i", 0, null, 0, new Uri("pack://application:,,,/Images/Ores/0.png"));
+      
+
         public List<Item> InventoryList = new List<Item>();
 
         public bool ShiftCD = false;
@@ -69,7 +73,8 @@ namespace Projekt
         public MainWindow()
         {
             InitializeComponent();
-
+            Recipes.Add(PH);
+            CreateRecipes();
             Generate();//Generates the world
             
             level = Canvas.GetBottom(player);
@@ -100,7 +105,14 @@ namespace Projekt
                 if(e.Key == Key.I)
                 {
                     OpenInventory();
+                   
+
                 }
+                else if (e.Key == Key.C)
+                {
+                    OpenCraft();
+                }
+                
 
                 if(blockMove == true) { return; }
                 switch (e.Key)
@@ -405,13 +417,6 @@ namespace Projekt
 
 
         }
-
-
-
-
-      
-
-
 
         double ts = 0;
         public void FallGravity(object sender, EventArgs e)
@@ -872,7 +877,23 @@ namespace Projekt
 
         
       
+        public void CreateRecipes()
+        {
+            Recipe CopperBar = new Recipe("Copper Bar", new Item(1, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"),2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Ores/Copper Bar.png"));
 
+            Recipes.Add(CopperBar);
+        }
+
+        public void OpenCraft()
+        {
+            if (Recipes[0].Name == "ph")
+            {
+                Recipes.RemoveAt(0);
+            }
+            RecipesW RecipeWindow = new RecipesW(Recipes);
+            RecipeWindow.Show();
+
+        }
 
         
     }

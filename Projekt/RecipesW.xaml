@@ -1,0 +1,39 @@
+﻿<Window x:Class="Projekt.RecipesW"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projekt"
+        mc:Ignorable="d"
+        Title="RecipesW" Height="450" Width="600">
+    <Grid Background="Gray" >
+        <Label Background="Red" Height="50" x:Name="Test" RenderTransformOrigin="0.495,0.496"></Label>
+        <ListView Background="Transparent" x:Name="RecList">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Height="50" Width="580" Background="DarkCyan" Opacity="1" >
+                        <Image Source="{Binding Image}" Height="50" Width="50" ></Image>
+                        <TextBlock x:Name ="out" Text="{Binding Output}" Width="200" TextAlignment="Center" FontSize="30"></TextBlock>
+                        <TextBlock Text="{Binding OAmount}" Width="30" TextAlignment="Center" FontSize="40"></TextBlock>
+                        <TextBlock Width="100">
+                            <Run Text="{Binding Res1}"></Run>
+                            <Run Text="{Binding Amount1}"></Run>
+                            <LineBreak/>
+                            <Run Text="{Binding Res2}"></Run>
+                            <Run Text="{Binding Amount2}"></Run>
+                             <LineBreak/>
+                            <Run Text="{Binding Res3}"></Run>
+                            <Run Text="{Binding Amount3}"></Run>
+                            
+                            
+                        </TextBlock>
+                        <Button Tag="{Binding Name}" Content="Craft" Width="50" Height="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Craft_Click"/>
+
+
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+    </Grid>
+</Window>
