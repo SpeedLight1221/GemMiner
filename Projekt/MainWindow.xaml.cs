@@ -536,7 +536,7 @@ namespace Projekt
 
         #endregion
 
-        // D- dirt S-stone C- copper T- tin I- iron
+        // D- dirt S-stone C- copper T- tin I- iron c-coal
 
         public void AddToInventory(string toAdd,string type)
         {
@@ -561,6 +561,9 @@ namespace Projekt
 
                 case 'I':
                     itemName = "Iron";
+                    break;
+                case 'c':
+                    itemName = "Coal";
                     break;
             }
 
@@ -628,7 +631,7 @@ namespace Projekt
                     stone.Height = 100;
                     stone.Tag = "GY_S";
 
-                    if ((SeedPlus[Math.Abs(k)] == '1')&& (k%2 ==0) && (j<25))
+                    if ((SeedPlus[Math.Abs(k)] == '1') && (k % 2 == 0) && (j < 25))
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/copper.png")) };
                         stone.Tag = "GY_C";
@@ -642,6 +645,11 @@ namespace Projekt
                     {
                         stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Iron.png")) };
                         stone.Tag = "GY_I";
+                    }
+                    else if (SeedPlus[Math.Abs(k)] == '4')
+                    {
+                        stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Coal.png")) };
+                        stone.Tag = "GY_c";
                     }
                     else
                     {
@@ -883,7 +891,7 @@ namespace Projekt
       
         public void CreateRecipes()
         {
-            Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"),2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Ores/Copper Bar.png"));
+            Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"),2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Icons/Copper Bar.png"));
 
             Recipes.Add(CopperBar);
         }

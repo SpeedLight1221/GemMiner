@@ -36,9 +36,9 @@ namespace Projekt
 
         private void Craft_Click(object sender, RoutedEventArgs e)
         {
-            Recipe Tocraft = null;
+            Recipe Tocraft = null; 
             
-            foreach (Recipe recipe in Recipes)
+            foreach (Recipe recipe in Recipes) // picks which recipe you want to use
             {
                 if (recipe.Name == ((sender as Button).Tag as string))
                 {
@@ -49,7 +49,7 @@ namespace Projekt
                 
             }
             
-
+            // prepares required resources and amounts
             string r1 = Tocraft.Res1;
             int a1 = Tocraft.Amount1;
 
@@ -63,7 +63,7 @@ namespace Projekt
            
 
 
-
+            //bools to check if you have the required resources
             bool i1 = false;
             bool i2 = false;
             bool i3 = false;
@@ -115,7 +115,7 @@ namespace Projekt
 
          
             List<Item> toremove = new List<Item>();
-            if ((i1) && (i3) && (i2))
+            if ((i1) && (i3) && (i2)) // if you have all resources
             {
                
                 foreach(Item i in InventoryCraft)
@@ -150,7 +150,7 @@ namespace Projekt
                 }
 
                 string t = "";
-                foreach(Item c in toremove)
+                foreach(Item c in toremove) //removes items from inventory if their amount after crafting reaches 0
                 {
                     t += " " + c.Name;
                     InventoryCraft.Remove(c);
@@ -159,7 +159,7 @@ namespace Projekt
 
 
                 
-                InventoryCraft.Add(Tocraft.Output);
+                InventoryCraft.Add(Tocraft.Output); // adds the output to inventory
                 
                 
             }

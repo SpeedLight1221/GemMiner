@@ -8,16 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Icons\Coal.png" />
+    <None Remove="Images\Icons\copper bar.png" />
     <None Remove="Images\Icons\copper.png" />
     <None Remove="Images\Icons\dirt.png" />
+    <None Remove="Images\Ores\Coal.png" />
     <None Remove="Images\Ores\copper.png" />
     <None Remove="Images\Ores\Iron.png" />
     <None Remove="Images\Ores\Tin.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Icons\Coal.png" />
     <Resource Include="Images\Icons\copper.png" />
+    <Resource Include="Images\Icons\copper bar.png" />
     <Resource Include="Images\Icons\Dirt.png" />
+    <Resource Include="Images\Ores\Coal.png" />
     <Resource Include="Images\Ores\copper.png" />
     <Resource Include="Images\Ores\Iron.png" />
     <Resource Include="Images\Ores\Tin.png" />
