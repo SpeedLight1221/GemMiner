@@ -92,9 +92,13 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
-           
+            Item coal = new Item(1, "coal", new Uri($"pack://application:,,,/Images/Icons/coal.png"), "item");
+            Item c1 = new Item(2, "Copper", new Uri($"pack://application:,,,/Images/Icons/copper.png"), "item");
+            InventoryList.Add(coal);
+            InventoryList.Add(c1);
 
-           
+
+
 
             #region keys
             this.KeyDown += (s, e) => //movement keys
@@ -879,19 +883,33 @@ namespace Projekt
       
         public void CreateRecipes()
         {
-            Recipe CopperBar = new Recipe("Copper Bar", new Item(1, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"),2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Ores/Copper Bar.png"));
+            Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"),2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Ores/Copper Bar.png"));
 
             Recipes.Add(CopperBar);
         }
 
         public void OpenCraft()
         {
+            
+
             if (Recipes[0].Name == "ph")
             {
                 Recipes.RemoveAt(0);
             }
-            RecipesW RecipeWindow = new RecipesW(Recipes);
+
+
+            RecipesW RecipeWindow = new RecipesW(Recipes, InventoryList);
+
+
+
+
             RecipeWindow.Show();
+
+
+            RecipeWindow.Closing += (s, e) =>
+            {
+                InventoryList = RecipeWindow.InventoryCraft;
+            };
 
         }
 
