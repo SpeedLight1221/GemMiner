@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -42,9 +43,9 @@ namespace Projekt
         public Item Slot2;
 
         public List<Recipe> Recipes = new List<Recipe>();
-        public Recipe PH = new Recipe("ph", new Item(0, "h", new Uri($"pack://application:,,,/Images/Icons/0.png"), "None"), 0, "e",0, "i", 0, null, 0, new Uri("pack://application:,,,/Images/Ores/0.png"));
-      
+        public Recipe PH = new Recipe("ph", new Item(0, "h", new Uri($"pack://application:,,,/Images/Icons/0.png"), "None"), 0, "e", 0, "i", 0, null, 0, new Uri("pack://application:,,,/Images/Ores/0.png"));
 
+        public bool tse = false;
         public List<Item> InventoryList = new List<Item>();
 
         public bool ShiftCD = false;
@@ -53,9 +54,9 @@ namespace Projekt
         public bool CD = false;
         bool tess = false;
         bool down = false;
-
+        int count = 0;
         public bool blockMove = false;
-
+        bool moving = false;
         public double Size = 100d;
         public double level = 120;
         public bool jumping = false;
@@ -64,10 +65,11 @@ namespace Projekt
 
         DispatcherTimer breaktimer = new DispatcherTimer();
 
-       
+
 
         Storyboard move = new Storyboard();//create storyboard for animating
         Rectangle selector = new Rectangle();
+        
 
         public bool blockedY = false;
         public MainWindow()
@@ -76,14 +78,15 @@ namespace Projekt
             Recipes.Add(PH);
             CreateRecipes();
             Generate();//Generates the world
-            
+            Timeline.SetDesiredFrameRate(move, 40);
+
             level = Canvas.GetBottom(player);
 
             ts = Canvas.GetBottom(player);
 
             JumpGravity();//calls jumpgravity  in order to avoid problems 
             Right();// calls right in order to avoid problems
-            breaktimer.Interval = new TimeSpan(0, 0, 0, 0,500); //sets the interval for breaking blocks
+            breaktimer.Interval = new TimeSpan(0, 0, 0, 0, 500); //sets the interval for breaking blocks
             selector.Width = 100; //creates the selector
             selector.Height = 100;
             selector.Fill = new SolidColorBrush((Color.FromArgb(128, 20, 20, 220)));
@@ -104,44 +107,51 @@ namespace Projekt
             this.KeyDown += (s, e) => //movement keys
             {
                 if (down == true) { return; }
+           
+
+                if (e.Key == Key.L)
+                {
+                    test2.Content = Canvas.GetBottom(Ground);
+                }
 
 
-                if(e.Key == Key.I)
+
+                if (e.Key == Key.I)
                 {
                     OpenInventory();
-                   
+
 
                 }
                 else if (e.Key == Key.C)
                 {
                     OpenCraft();
                 }
-                
 
-                if(blockMove == true) { return; }
+
+                if (blockMove == true) { return; }
                 switch (e.Key)
                 {
                     case Key.Space:
                         Jump();
 
-                        break; 
+                        break;
                     case Key.D:
 
                         Right();
-                        
-                        
+
+
 
                         break;
                     case Key.A:
                         Left();
                         break;
-                        
-               
+
+
 
                 }
                 test.Content = Canvas.GetBottom(player);
                 down = true;
-                
+
             };
 
 
@@ -155,7 +165,7 @@ namespace Projekt
 
             this.MouseLeftButtonDown += (s, e) => //mouse btns
             {
-                
+
                 Break();
             };
 
@@ -169,19 +179,19 @@ namespace Projekt
             {
                 double X = Mouse.GetPosition(player).X;
                 double Y = Mouse.GetPosition(player).Y;
-                if ((X < 0) && (Y < 0)) {  Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); } //top left
-                else if ((X>100) && (Y<0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }  //top right
-                else if ((X < 0) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player)- 100)); } //bottom left
-                else if ((X > 100) && (Y> 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }  //bottom right
-                else if ((X<0)&&((0<Y))&&(Y<100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//left
+                if ((X < 0) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); } //top left
+                else if ((X > 100) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }  //top right
+                else if ((X < 0) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); } //bottom left
+                else if ((X > 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }  //bottom right
+                else if ((X < 0) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//left
                 else if ((X > 100) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//right
-                else if (((0 < X)) && (X < 100)&& (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player)+100)); }//top
-                else if (((0 < X)) && (X < 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player)-100)); }//top
+                else if (((0 < X)) && (X < 100) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }//top
+                else if (((0 < X)) && (X < 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }//top
 
 
             };
 
-            
+
 
 
         }
@@ -207,6 +217,7 @@ namespace Projekt
         {
             move.Completed -= JumpCompleted;
             move.FillBehavior = FillBehavior.HoldEnd;
+            if(tse == true) { return; }
 
             JumpGravity();
         }
@@ -227,7 +238,7 @@ namespace Projekt
             cooldown(new object(), new EventArgs());
             move.Children.Clear();
 
-            if(Canvas.GetBottom(player)>=820)
+            if (Canvas.GetBottom(player) >= 820)
             {
                 test.Background = Brushes.Red;
                 ShiftScreen(3);
@@ -239,6 +250,9 @@ namespace Projekt
         #endregion
         public void Animation(double x1, double x2, double y1, double y2, bool Grav, double time)
         {
+            moving = true;
+          move.Duration = new Duration(TimeSpan.FromSeconds(time));
+
 
             move.FillBehavior = FillBehavior.HoldEnd;
 
@@ -265,6 +279,12 @@ namespace Projekt
             move.Children.Add(AnimX);
 
 
+            if (move.GetAnimationBaseValue(Canvas.BottomProperty) != null)
+            {
+                count++;
+            }
+
+
 
             move.Completed += (s, e) =>
             {
@@ -273,7 +293,9 @@ namespace Projekt
 
                 Canvas.SetLeft(player, x2);
                 Canvas.SetBottom(player, y2);
-                
+
+                jumping = false;
+
 
             };
 
@@ -423,45 +445,53 @@ namespace Projekt
         }
 
         double ts = 0;
+
         public void FallGravity(object sender, EventArgs e)
         {
+            double time = 1;
+            if(tse == true)
+            {
+                time = 0.01;
+            }
 
 
             foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
             {
                 if (((collCheck.Tag as string)[0] == 'G') && ((collCheck.Tag as string)[0] != '_'))
-                    {
-                        if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - Size) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
-                        {
-
-                            return;
-                        }
-                    }
-                }
-
-
-                for (int i = 2; i < 12; i++)
                 {
-                    foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                    if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - Size) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
                     {
-                        if (((collCheck.Tag as string)[0] == 'G')&& ((collCheck.Tag as string)[0] != '_'))
-                        {
-                            if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
-                            {
-                                player.Fill = Brushes.Yellow;
 
-                                Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false, 0.4);
-                                move.Completed += levelCheck;
-                                if (Canvas.GetBottom(player) < 120) { ShiftScreen(2); }
-                                return;
-
-                            }
-
-                        }
+                        return;
                     }
                 }
+            }
+            for (int i = 2; i < 12; i++)
+            {
+                foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
+                {
+                    if (((collCheck.Tag as string)[0] == 'G') && ((collCheck.Tag as string)[0] != '_'))
+                    {
+                        if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
+                        {
+                            player.Fill = Brushes.Yellow;
+
+                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false, time);
+                            move.Completed += levelCheck;
+                            if (Canvas.GetBottom(player) < 120) { ShiftScreen(2); }
+                            return;
+
+                        }
+
+                    }
+                }
+            }
 
         } // ensures that the player falls when they move 
+
+
+
+    
 
         public void levelCheck(object sender, EventArgs e)
         {
@@ -472,7 +502,7 @@ namespace Projekt
 
 
 
-        
+
         public void cooldown(object sender, EventArgs e)
         {
             jumping = false;
@@ -495,7 +525,7 @@ namespace Projekt
         #region break
         public void Break()
         {
-            
+
 
             foreach (var breakCheck in MyCan.Children.OfType<Rectangle>())
             {
@@ -513,17 +543,17 @@ namespace Projekt
 
             breaktimer.Tick += (s, e) =>
             {
-                if(toBreak != null)
+                if (toBreak != null)
                 {
                     MyCan.Children.Remove(toBreak);
 
 
 
-                    AddToInventory(toBreak.Tag as string,"Block");
+                    AddToInventory(toBreak.Tag as string, "Block");
 
 
                     toBreak = null;
-                    FallGravity(new object(),new EventArgs());
+                    FallGravity(new object(), new EventArgs());
                     breaktimer.Stop();
                 }
             };
@@ -538,10 +568,10 @@ namespace Projekt
 
         // D- dirt S-stone C- copper T- tin I- iron c-coal
 
-        public void AddToInventory(string toAdd,string type)
+        public void AddToInventory(string toAdd, string type)
         {
             string itemName = "";
-            switch(toAdd[3])
+            switch (toAdd[3])
             {
                 case 'D':
                     itemName = "Dirt";
@@ -569,17 +599,17 @@ namespace Projekt
 
 
 
-            foreach(Item i in InventoryList) //check if item of this type is already in inventory
+            foreach (Item i in InventoryList) //check if item of this type is already in inventory
             {
-                if(i.Name == itemName)
+                if (i.Name == itemName)
                 {
                     i.Amount++;
                     return;
                 }
-                
+
             }
 
-            Item ni = new Item(1, itemName, new Uri($"pack://application:,,,/Images/Icons/{itemName}.png"),type);
+            Item ni = new Item(1, itemName, new Uri($"pack://application:,,,/Images/Icons/{itemName}.png"), type);
             InventoryList.Add(ni);
 
 
@@ -611,11 +641,11 @@ namespace Projekt
             int k = 0;
             for (int i = -100; i < 100; i++)
             {
-                
+
                 for (int j = 2; j < 40; j++)
                 {
 
-                    if(k+1 < SeedPlus.Length)
+                    if (k + 1 < SeedPlus.Length)
                     {
                         k++;
                     }
@@ -625,7 +655,7 @@ namespace Projekt
                     }
 
 
-                    
+
                     Rectangle stone = new Rectangle();
                     stone.Width = 100;
                     stone.Height = 100;
@@ -658,7 +688,7 @@ namespace Projekt
                     }
                     MyCan.Children.Add(stone);
                     Canvas.SetLeft(stone, 100 * i);
-                    Canvas.SetBottom(stone, 20-(100 * j));
+                    Canvas.SetBottom(stone, 20 - (100 * j));
 
 
 
@@ -697,12 +727,12 @@ namespace Projekt
             //Generates a valley
             int d = 0;// depth of the valley
             int w = 0; //width of the valley
-            if (Convert.ToInt16(SeedPlus[k])>7)
+            if (Convert.ToInt16(SeedPlus[k]) > 7)
             {
                 d = 6;
                 w = 9;
             }
-            else if (Convert.ToInt16(SeedPlus[k])>4)
+            else if (Convert.ToInt16(SeedPlus[k]) > 4)
             {
                 d = 5;
                 w = 6;
@@ -723,11 +753,11 @@ namespace Projekt
 
                 for (int i = 0; i <= d; i++)
                 {
-                    for (int j = 0+ minW; j <= w-maxW; j++)
+                    for (int j = 0 + minW; j <= w - maxW; j++)
                     {
-                       if(Canvas.GetBottom(removeCheck) == -80 - (100 * i))
+                        if (Canvas.GetBottom(removeCheck) == -80 - (100 * i))
                         {
-                            if(Canvas.GetLeft(removeCheck) == j*100+500+offsetG)
+                            if (Canvas.GetLeft(removeCheck) == j * 100 + 500 + offsetG)
                             {
                                 if ((removeCheck.Tag as string)[0] != '_')
                                 {
@@ -758,13 +788,13 @@ namespace Projekt
 
             }
 
-            foreach(Rectangle c in toremove)
+            foreach (Rectangle c in toremove)
             {
                 test2.Content += (c.Tag as string) + "\n";
                 MyCan.Children.Remove(c);
-                
+
             }
-           
+
 
 
 
@@ -773,7 +803,7 @@ namespace Projekt
 
 
         }
-
+        
         public void ShiftScreen(byte direction)//0-left 1-right 2-down 3-up
         {
             if (ShiftCD == false)
@@ -808,7 +838,7 @@ namespace Projekt
                 }
                 else if (direction == 2)//down
                 {
-                    
+
                     Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 820, true, 0.2);
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
@@ -818,11 +848,12 @@ namespace Projekt
                         }
 
                     }
-                    
+
                 }
                 else if (direction == 3)
                 {
-                    
+                    player.BeginAnimation(Canvas.BottomProperty, null);
+                    Storyboard fall = new Storyboard();
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
                         if ((collCheck.Tag as string)[0] != '_')
@@ -830,25 +861,32 @@ namespace Projekt
 
                             if (collCheck.Name != "player")
                             {
+                                
                                 Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 800);
                             }
                             else
                             {
-                                move.Stop();
-                                Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 100, true, 0.2);
+                                
+
+                               
+                                tse = true;
+             
+
 
                             }
                         }
-                        
+
 
                     }
-                    
 
                    
+
+
+
                 }
             }
         }
-        
+
 
 
 
@@ -874,7 +912,7 @@ namespace Projekt
 
         public void EquipSlots(Item s1, Item s2)
         {
-            if(s1 != null)
+            if (s1 != null)
             {
                 Slot1 = s1;
                 PrimImg.Source = new BitmapImage(Slot1.Image);
@@ -887,18 +925,18 @@ namespace Projekt
             }
         }
 
-        
-      
+
+
         public void CreateRecipes()
         {
-            Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"),2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Icons/Copper Bar.png"));
+            Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"), 2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Icons/Copper Bar.png"));
 
             Recipes.Add(CopperBar);
         }
 
         public void OpenCraft()
         {
-            
+
 
             if (Recipes[0].Name == "ph")
             {
@@ -921,7 +959,7 @@ namespace Projekt
 
         }
 
-        
+
     }
 }
 
