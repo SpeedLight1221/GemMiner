@@ -8,24 +8,58 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Icons\bronze axe.png" />
+    <None Remove="Images\Icons\bronze bar.png" />
+    <None Remove="Images\Icons\bronze pick.png" />
     <None Remove="Images\Icons\Coal.png" />
+    <None Remove="Images\Icons\copper axe.png" />
     <None Remove="Images\Icons\copper bar.png" />
+    <None Remove="Images\Icons\copper pick.png" />
     <None Remove="Images\Icons\copper.png" />
     <None Remove="Images\Icons\dirt.png" />
+    <None Remove="Images\Icons\iron axe.png" />
+    <None Remove="Images\Icons\iron bar.png" />
+    <None Remove="Images\Icons\iron pick.png" />
+    <None Remove="Images\Icons\iron.png" />
+    <None Remove="Images\Icons\old copper pick.png" />
+    <None Remove="Images\Icons\Plank.png" />
+    <None Remove="Images\Icons\tin.png" />
     <None Remove="Images\Ores\Coal.png" />
     <None Remove="Images\Ores\copper.png" />
+    <None Remove="Images\Ores\Dirt.png" />
+    <None Remove="Images\Ores\grass.png" />
     <None Remove="Images\Ores\Iron.png" />
+    <None Remove="Images\Ores\Leaves.png" />
+    <None Remove="Images\Ores\Log.png" />
+    <None Remove="Images\Ores\Plank.png" />
     <None Remove="Images\Ores\Tin.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Icons\bronze axe.png" />
+    <Resource Include="Images\Icons\bronze bar.png" />
+    <Resource Include="Images\Icons\bronze pick.png" />
     <Resource Include="Images\Icons\Coal.png" />
+    <Resource Include="Images\Icons\copper axe.png" />
+    <Resource Include="Images\Icons\copper pick.png" />
     <Resource Include="Images\Icons\copper.png" />
     <Resource Include="Images\Icons\copper bar.png" />
     <Resource Include="Images\Icons\Dirt.png" />
+    <Resource Include="Images\Icons\iron axe.png" />
+    <Resource Include="Images\Icons\iron bar.png" />
+    <Resource Include="Images\Icons\iron pick.png" />
+    <Resource Include="Images\Icons\iron.png" />
+    <Resource Include="Images\Icons\old copper pick.png" />
+    <Resource Include="Images\Icons\Plank.png" />
+    <Resource Include="Images\Icons\tin.png" />
     <Resource Include="Images\Ores\Coal.png" />
     <Resource Include="Images\Ores\copper.png" />
+    <Resource Include="Images\Ores\Dirt.png" />
+    <Resource Include="Images\Ores\grass.png" />
     <Resource Include="Images\Ores\Iron.png" />
+    <Resource Include="Images\Ores\Leaves.png" />
+    <Resource Include="Images\Ores\Log.png" />
+    <Resource Include="Images\Ores\Plank.png" />
     <Resource Include="Images\Ores\Tin.png" />
   </ItemGroup>
 

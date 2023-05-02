@@ -21,7 +21,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
 using System.Windows.Threading;
-
+using System.Xaml;
 
 namespace Projekt
 {
@@ -31,7 +31,7 @@ namespace Projekt
     /// 
 
 
-    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False)  [2] - U - Ubreakable (U-true,_-false) [3] resource type (D-dirt,S-stone)
+    // Tag Logic : [0] Type of object (G-Ground) [1] - Y top collision (Y-true, _-False)  [2] - U - Ubreakable (U-true,_-false) [3] resource type (D-dirt,S-stone,W-wood)
 
 
     //TODO: Screen shift  up - Resources
@@ -55,6 +55,7 @@ namespace Projekt
         bool tess = false;
         bool down = false;
         int count = 0;
+        int xxx = 0;
         public bool blockMove = false;
         bool moving = false;
         public double Size = 100d;
@@ -69,7 +70,7 @@ namespace Projekt
 
         Storyboard move = new Storyboard();//create storyboard for animating
         Rectangle selector = new Rectangle();
-        
+
 
         public bool blockedY = false;
         public MainWindow()
@@ -82,7 +83,7 @@ namespace Projekt
 
             level = Canvas.GetBottom(player);
 
-            ts = Canvas.GetBottom(player);
+
 
             JumpGravity();//calls jumpgravity  in order to avoid problems 
             Right();// calls right in order to avoid problems
@@ -107,12 +108,9 @@ namespace Projekt
             this.KeyDown += (s, e) => //movement keys
             {
                 if (down == true) { return; }
-           
 
-                if (e.Key == Key.L)
-                {
-                    test2.Content = Canvas.GetBottom(Ground);
-                }
+
+
 
 
 
@@ -149,6 +147,7 @@ namespace Projekt
 
 
                 }
+                MoveCursor();
                 test.Content = Canvas.GetBottom(player);
                 down = true;
 
@@ -177,17 +176,7 @@ namespace Projekt
 
             this.MouseMove += (s, e) =>
             {
-                double X = Mouse.GetPosition(player).X;
-                double Y = Mouse.GetPosition(player).Y;
-                if ((X < 0) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); } //top left
-                else if ((X > 100) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }  //top right
-                else if ((X < 0) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); } //bottom left
-                else if ((X > 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }  //bottom right
-                else if ((X < 0) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//left
-                else if ((X > 100) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//right
-                else if (((0 < X)) && (X < 100) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }//top
-                else if (((0 < X)) && (X < 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }//top
-
+                MoveCursor();
 
             };
 
@@ -217,7 +206,7 @@ namespace Projekt
         {
             move.Completed -= JumpCompleted;
             move.FillBehavior = FillBehavior.HoldEnd;
-            if(tse == true) { return; }
+            if (tse == true) { return; }
 
             JumpGravity();
         }
@@ -251,7 +240,7 @@ namespace Projekt
         public void Animation(double x1, double x2, double y1, double y2, bool Grav, double time)
         {
             moving = true;
-          move.Duration = new Duration(TimeSpan.FromSeconds(time));
+            move.Duration = new Duration(TimeSpan.FromSeconds(time));
 
 
             move.FillBehavior = FillBehavior.HoldEnd;
@@ -303,7 +292,7 @@ namespace Projekt
             if (Grav == true)
             {
                 move.Completed += FallGravity;
-                test.Background = Brushes.PaleGreen;
+              
             }
 
 
@@ -444,12 +433,10 @@ namespace Projekt
 
         }
 
-        double ts = 0;
-
         public void FallGravity(object sender, EventArgs e)
         {
             double time = 1;
-            if(tse == true)
+            if (tse == true)
             {
                 time = 0.01;
             }
@@ -490,17 +477,11 @@ namespace Projekt
         } // ensures that the player falls when they move 
 
 
-
-    
-
         public void levelCheck(object sender, EventArgs e)
         {
             level = Canvas.GetBottom(player);
             move.Completed -= levelCheck;
         } //ensures that the level variable is up to dae
-
-
-
 
 
         public void cooldown(object sender, EventArgs e)
@@ -595,6 +576,9 @@ namespace Projekt
                 case 'c':
                     itemName = "Coal";
                     break;
+                case 'W':
+                    itemName = "Log";
+                    break;
             }
 
 
@@ -622,6 +606,22 @@ namespace Projekt
 
         #endregion
 
+        public void MoveCursor()
+        {
+            double X = Mouse.GetPosition(player).X;
+            double Y = Mouse.GetPosition(player).Y;
+            if ((X < 0) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); } //top left
+            else if ((X > 100) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }  //top right
+            else if ((X < 0) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); } //bottom left
+            else if ((X > 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }  //bottom right
+            else if ((X < 0) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) - 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//left
+            else if ((X > 100) && ((0 < Y)) && (Y < 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player) + 100)); Canvas.SetBottom(selector, (Canvas.GetBottom(player))); }//right
+            else if (((0 < X)) && (X < 100) && (Y < 0)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player) + 100)); }//top
+            else if (((0 < X)) && (X < 100) && (Y > 100)) { Canvas.SetLeft(selector, (Canvas.GetLeft(player))); Canvas.SetBottom(selector, (Canvas.GetBottom(player) - 100)); }//top
+
+        } // moves cursor when moving the mouse
+
+
 
         public void Generate()
         {
@@ -634,13 +634,20 @@ namespace Projekt
             }
             test.Content = SeedPlus;
 
+            List<int> TreeLocsX = new List<int>();
 
 
-
-
+          
             int k = 0;
             for (int i = -100; i < 100; i++)
             {
+                if (SeedPlus[Math.Abs(i)] == '7')
+                {
+                    TreeLocsX.Add(i);
+               
+                }
+
+
 
                 for (int j = 2; j < 40; j++)
                 {
@@ -701,7 +708,7 @@ namespace Projekt
                 Rectangle baseDirt = new Rectangle();
                 baseDirt.Width = 100;
                 baseDirt.Height = 100;
-                baseDirt.Fill = Brushes.Brown;
+                baseDirt.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Dirt.png")) };
                 baseDirt.Tag = "GY_D";
                 baseDirt.Name = "Dirt";
                 Canvas.SetLeft(baseDirt, 100 * i);
@@ -717,83 +724,89 @@ namespace Projekt
                 Canvas.SetLeft(Bedrock, 100 * i);
                 Canvas.SetBottom(Bedrock, -80 * 41);
                 MyCan.Children.Add(Bedrock);
+                
 
             }
+
+
+
+
+
 
             #region valley
 
-            int offsetG = 0; // will be used to make the valley genarate on any point on map
+            //int offsetG = 0; // will be used to make the valley genarate on any point on map
 
-            //Generates a valley
-            int d = 0;// depth of the valley
-            int w = 0; //width of the valley
-            if (Convert.ToInt16(SeedPlus[k]) > 7)
-            {
-                d = 6;
-                w = 9;
-            }
-            else if (Convert.ToInt16(SeedPlus[k]) > 4)
-            {
-                d = 5;
-                w = 6;
-            }
-            else
-            {
-                d = 4;
-                w = 5;
-            }
-
-
-            List<Rectangle> toremove = new List<Rectangle>();
-
-            foreach (var removeCheck in MyCan.Children.OfType<Rectangle>())
-            {
-                int minW = 0; // changes the width for each layer
-                int maxW = 0;
-
-                for (int i = 0; i <= d; i++)
-                {
-                    for (int j = 0 + minW; j <= w - maxW; j++)
-                    {
-                        if (Canvas.GetBottom(removeCheck) == -80 - (100 * i))
-                        {
-                            if (Canvas.GetLeft(removeCheck) == j * 100 + 500 + offsetG)
-                            {
-                                if ((removeCheck.Tag as string)[0] != '_')
-                                {
-                                    toremove.Add(removeCheck);
-                                }
-                            }
-                        }
-                    }
-                    if ((SeedPlus[i] == '6') || (SeedPlus[i] == '7')) //makes it so the valley isnt symmetric
-                    {
-                        minW += 0;
-                        maxW += 1;
-                    }
-                    else if (SeedPlus[i] == '4')
-                    {
-                        maxW += 2;
-                        minW += 1;
-                    }
-                    else
-                    {
-                        minW += 1;
-                        maxW += 1;
-                    }
+            ////Generates a valley
+            //int d = 0;// depth of the valley
+            //int w = 0; //width of the valley
+            //if (Convert.ToInt16(SeedPlus[k]) > 7)
+            //{
+            //    d = 6;
+            //    w = 9;
+            //}
+            //else if (Convert.ToInt16(SeedPlus[k]) > 4)
+            //{
+            //    d = 5;
+            //    w = 6;
+            //}
+            //else
+            //{
+            //    d = 4;
+            //    w = 5;
+            //}
 
 
-                }
+            //List<Rectangle> toremove = new List<Rectangle>();
+
+            //foreach (var removeCheck in MyCan.Children.OfType<Rectangle>())
+            //{
+            //    int minW = 0; // changes the width for each layer
+            //    int maxW = 0;
+
+            //    for (int i = 0; i <= d; i++)
+            //    {
+            //        for (int j = 0 + minW; j <= w - maxW; j++)
+            //        {
+            //            if (Canvas.GetBottom(removeCheck) == -80 - (100 * i))
+            //            {
+            //                if (Canvas.GetLeft(removeCheck) == j * 100 + 500 + offsetG)
+            //                {
+            //                    if ((removeCheck.Tag as string)[0] != '_')
+            //                    {
+            //                        toremove.Add(removeCheck);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        if ((SeedPlus[i] == '6') || (SeedPlus[i] == '7')) //makes it so the valley isnt symmetric
+            //        {
+            //            minW += 0;
+            //            maxW += 1;
+            //        }
+            //        else if (SeedPlus[i] == '4')
+            //        {
+            //            maxW += 2;
+            //            minW += 1;
+            //        }
+            //        else
+            //        {
+            //            minW += 1;
+            //            maxW += 1;
+            //        }
 
 
-            }
+            //    }
 
-            foreach (Rectangle c in toremove)
-            {
-                test2.Content += (c.Tag as string) + "\n";
-                MyCan.Children.Remove(c);
 
-            }
+            //}
+
+            //foreach (Rectangle c in toremove)
+            //{
+            //    test2.Content += (c.Tag as string) + "\n";
+            //    MyCan.Children.Remove(c);
+
+            //}
 
 
 
@@ -802,9 +815,87 @@ namespace Projekt
 
 
 
+
+
+
+            #region Trees
+          
+            List<double[]> coords = new List<double[]>();
+
+            foreach (var TreeCheck in MyCan.Children.OfType<Rectangle>())
+            {
+                if (((TreeCheck.Tag as string)[0] == 'G') && (TreeLocsX.Contains(Convert.ToInt32(Canvas.GetLeft(TreeCheck)))))
+                {
+                    foreach(var Upcheck in MyCan.Children.OfType<Rectangle>())
+                    {
+                        if((Canvas.GetBottom(Upcheck)+100 == Canvas.GetBottom(TreeCheck))&&(Canvas.GetLeft(Upcheck) == Canvas.GetLeft(TreeCheck)))
+                        {
+                            break;
+                        }
+
+                        
+                       
+                        double[] c = new double[2];
+                        c[0] = Canvas.GetLeft(TreeCheck);
+                        c[1] = Canvas.GetBottom(TreeCheck);
+                        coords.Add(c);
+                        
+
+                    }
+                }
+            }
+
+
+            double[] teeest = new double[2];
+            teeest[0] = 400;
+            teeest[1] = 120;
+            coords.Add(teeest);
+
+          
+            GenerateTree(coords);
+            
+            #endregion
         }
-        
-        public void ShiftScreen(byte direction)//0-left 1-right 2-down 3-up
+
+        public void GenerateTree(List<double[]> co)
+        {
+
+            test.Content = "" + co.Count();
+            foreach (double[] c in co)
+            {
+                double X = c[0];
+                double Y = c[1] + 100;
+
+                int height = 3;
+                if ((X / 100) % 2 == 0)
+                {
+                    height = 5;
+                }
+
+
+                for (int i = 0; i < height; i++)
+                {
+                    Rectangle wood = new Rectangle();
+                    wood.Width = 100;
+                    wood.Height = 100;
+                    wood.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Log.png")) };
+                    wood.Tag = "GY_W";
+                    wood.Name = "Wood";
+                    Canvas.SetLeft(wood, X);
+                    Canvas.SetBottom(wood, Y + i);
+                    MyCan.Children.Add(wood);
+                }
+            }
+
+
+
+
+
+        }
+
+
+
+        public void ShiftScreen(byte direction)//0-left 1-right 2-down 3-up || Moves everything on the screen when the player crosses a boundary
         {
             if (ShiftCD == false)
             {
@@ -861,16 +952,16 @@ namespace Projekt
 
                             if (collCheck.Name != "player")
                             {
-                                
+
                                 Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 800);
                             }
                             else
                             {
-                                
 
-                               
+
+
                                 tse = true;
-             
+
 
 
                             }
@@ -879,7 +970,7 @@ namespace Projekt
 
                     }
 
-                   
+
 
 
 
