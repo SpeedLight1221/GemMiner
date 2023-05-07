@@ -84,7 +84,7 @@ namespace Projekt
                 if (r2 != null) //resource two check
                 {
                    
-                    if ((r2 == i.Name) && (a2 <= i.Amount))
+                    if ((r2 == i.Name.ToLower()) && (a2 <= i.Amount))
                     {
                         i2 = true;
                     }
@@ -98,7 +98,7 @@ namespace Projekt
 
                 if (r3 != null)// resource three check
                 {
-                    if ((r3 == i.Name) && (a3 <= i.Amount))
+                    if ((r3 == i.Name.ToLower()) && (a3 <= i.Amount))
                     {
                         i3 = true;
                     }
@@ -112,7 +112,7 @@ namespace Projekt
 
             }
 
-
+            //MessageBox.Show(r1 + " " + r2 + " " + r3);
          
             List<Item> toremove = new List<Item>();
             if ((i1) && (i3) && (i2)) // if you have all resources
@@ -132,6 +132,7 @@ namespace Projekt
 
                     if (i.Name.ToLower() == r2)
                     {
+                        
                         i.Amount -= (int)a2;
                         if (i.Amount == 0)
                         {

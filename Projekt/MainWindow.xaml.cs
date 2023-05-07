@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Shell;
 using System.Windows.Threading;
-using System.Xaml;
 
 namespace Projekt
 {
@@ -96,9 +83,9 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
-            Item coal = new Item(1, "coal", new Uri($"pack://application:,,,/Images/Icons/coal.png"), "item");
+            
             Item c1 = new Item(2, "Copper", new Uri($"pack://application:,,,/Images/Icons/copper.png"), "item");
-            InventoryList.Add(coal);
+            
             InventoryList.Add(c1);
 
 
@@ -559,6 +546,10 @@ namespace Projekt
             string itemName = "";
             switch (toAdd[3])
             {
+                case '_':
+                    return ;
+                    break;
+
                 case 'D':
                     itemName = "Dirt";
                     break;
@@ -647,7 +638,7 @@ namespace Projekt
             for (int i = -100; i < 100; i++)
             {
 
-                if (SeedPlus[Math.Abs(i)] == '5')
+                if ((SeedPlus[Math.Abs(i)] == '5')|| ((SeedPlus[Math.Abs(i)] == '8')&&(i%2==0)))
                 {
                     TreeLocsX.Add(i * 100);
                     x += "_" + i * 100 + "\n";
@@ -882,7 +873,7 @@ namespace Projekt
 
             GenerateTree(coords);
             
-            #endregion
+            
         }
 
         public void GenerateTree(List<double[]> co)
@@ -923,6 +914,48 @@ namespace Projekt
                     Canvas.SetBottom(wood, Y + (i*100));
                     MyCan.Children.Add(wood);
                 }
+
+                for(int i = 0; i < 7; i++)
+                {
+                    Rectangle leave = new Rectangle();
+                    leave.Width = 100;
+                    leave.Height = 100;
+                    leave.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Leaves.png")) };
+                    leave.Tag = "GY__";
+                    leave.Name = "Leaves";
+                    MyCan.Children.Add(leave);
+
+                    if(i <3)
+                    {
+                        Canvas.SetBottom(leave, (height*100)+20);
+                    }
+                    else if(i < 6)
+                    {
+                        Canvas.SetBottom(leave, (height * 100) + 120);
+                    }
+                    else
+                    {
+                        Canvas.SetBottom(leave, (height * 100) + 220);
+                    }
+
+
+
+                    if((i == 0)||(i == 3))
+                    {
+                        Canvas.SetLeft(leave, X-100);
+                    }
+                    else if ((i == 2) || (i == 5))
+                    {
+                        Canvas.SetLeft(leave, X + 100);
+                    }
+                    else
+                    {
+                        Canvas.SetLeft(leave, X);
+                    }
+
+
+                }
+
             }
 
 
@@ -930,6 +963,7 @@ namespace Projekt
 
 
         }
+        #endregion
 
 
 
