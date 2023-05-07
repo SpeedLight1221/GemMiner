@@ -196,6 +196,7 @@ namespace Projekt
             jumping = true;
             move.Completed -= JumpCompleted;
             move.Completed += JumpCompleted;
+            cooldown(new object(), new EventArgs());
             level = Canvas.GetBottom(player);
 
             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) + 150d, false, 0.2);
@@ -224,7 +225,7 @@ namespace Projekt
         public void JumpGravityCompleted(object sender, EventArgs e)
         {
             move.Completed -= JumpGravityCompleted;
-            cooldown(new object(), new EventArgs());
+            
             move.Children.Clear();
 
             if (Canvas.GetBottom(player) >= 820)
@@ -486,11 +487,15 @@ namespace Projekt
 
         public void cooldown(object sender, EventArgs e)
         {
+            int cd = 200;
+            if(jumping == true) { cd = 750; }
+
+
             jumping = false;
 
             CD = true;
 
-            coolDown.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            coolDown.Interval = new TimeSpan(0, 0, 0, 0, cd);
             coolDown.Start();
             coolDown.Tick += (sender, e) =>
             {
@@ -577,7 +582,7 @@ namespace Projekt
                     itemName = "Coal";
                     break;
                 case 'W':
-                    itemName = "Log";
+                    itemName = "Plank";
                     break;
             }
 
@@ -622,7 +627,7 @@ namespace Projekt
         } // moves cursor when moving the mouse
 
 
-
+        int e = 0;
         public void Generate()
         {
             Random rnd = new Random();
@@ -632,20 +637,22 @@ namespace Projekt
 
                 SeedPlus += Convert.ToString(rnd.Next(0, 10));
             }
-            test.Content = SeedPlus;
+            //test.Content = SeedPlus;
 
             List<int> TreeLocsX = new List<int>();
 
 
-          
+            string x = "";
             int k = 0;
             for (int i = -100; i < 100; i++)
             {
-                if (SeedPlus[Math.Abs(i)] == '7')
+
+                if (SeedPlus[Math.Abs(i)] == '5')
                 {
-                    TreeLocsX.Add(i);
-               
+                    TreeLocsX.Add(i * 100);
+                    x += "_" + i * 100 + "\n";
                 }
+                
 
 
 
@@ -728,7 +735,7 @@ namespace Projekt
 
             }
 
-
+           
 
 
 
@@ -816,42 +823,63 @@ namespace Projekt
 
 
 
-
+            
 
             #region Trees
           
-            List<double[]> coords = new List<double[]>();
+            List<double[]> coords = new List<double[]>();//for every x coordinate for a tree, finds a Y coordinate
+            List<Rectangle> FoundX = new List<Rectangle>();
 
             foreach (var TreeCheck in MyCan.Children.OfType<Rectangle>())
             {
-                if (((TreeCheck.Tag as string)[0] == 'G') && (TreeLocsX.Contains(Convert.ToInt32(Canvas.GetLeft(TreeCheck)))))
+                if (((TreeCheck.Tag as string)[0] == 'G') && (TreeLocsX.Contains(Convert.ToInt32(Canvas.GetLeft(TreeCheck))))&&(Canvas.GetBottom(TreeCheck) > -200 ))
                 {
-                    foreach(var Upcheck in MyCan.Children.OfType<Rectangle>())
-                    {
-                        if((Canvas.GetBottom(Upcheck)+100 == Canvas.GetBottom(TreeCheck))&&(Canvas.GetLeft(Upcheck) == Canvas.GetLeft(TreeCheck)))
-                        {
-                            break;
-                        }
+                    e++;
 
-                        
-                       
-                        double[] c = new double[2];
-                        c[0] = Canvas.GetLeft(TreeCheck);
-                        c[1] = Canvas.GetBottom(TreeCheck);
-                        coords.Add(c);
-                        
-
-                    }
+                    FoundX.Add(TreeCheck);
+                   
                 }
             }
 
+            List<double> DupeCheck = new List<double>();
+            foreach(Rectangle Upcheck in FoundX)
+            {
+                List<Rectangle> FindUp = new List<Rectangle>();
+                foreach (Rectangle Uppercheck in FoundX)
+                {
+                    if(Canvas.GetLeft(Uppercheck)== Canvas.GetLeft(Upcheck))
+                    {
+                        FindUp.Add(Uppercheck);
+                    }
+                }
 
-            double[] teeest = new double[2];
-            teeest[0] = 400;
-            teeest[1] = 120;
-            coords.Add(teeest);
+              
 
-          
+                List<Rectangle> sortList = FindUp.OrderBy(r => Canvas.GetBottom(r)).Reverse().ToList();
+
+                if (DupeCheck.Contains(Canvas.GetLeft(sortList[0])))
+                {
+
+                }
+                else
+                {
+                    double[] c = new double[2];
+                    c[0] = Canvas.GetLeft(sortList[0]);
+                    c[1] = Canvas.GetBottom(sortList[0]);
+                    DupeCheck.Add(c[0]);
+                    coords.Add(c);
+
+                }
+
+
+
+
+            }
+
+
+
+            
+
             GenerateTree(coords);
             
             #endregion
@@ -860,16 +888,26 @@ namespace Projekt
         public void GenerateTree(List<double[]> co)
         {
 
-            test.Content = "" + co.Count();
+            
+
+            
+            string text = "";
+            foreach (double[] e in co)
+            {
+                text += " " + e[0] + "\n ";
+            }
+            MessageBox.Show(text);
+
+            test.Content = ".-." + co.Count() + "ss" + e;
             foreach (double[] c in co)
             {
                 double X = c[0];
-                double Y = c[1] + 100;
+                double Y = c[1]+100 ;
 
-                int height = 3;
+                int height = 2;
                 if ((X / 100) % 2 == 0)
                 {
-                    height = 5;
+                    height = 4;
                 }
 
 
@@ -882,7 +920,7 @@ namespace Projekt
                     wood.Tag = "GY_W";
                     wood.Name = "Wood";
                     Canvas.SetLeft(wood, X);
-                    Canvas.SetBottom(wood, Y + i);
+                    Canvas.SetBottom(wood, Y + (i*100));
                     MyCan.Children.Add(wood);
                 }
             }
