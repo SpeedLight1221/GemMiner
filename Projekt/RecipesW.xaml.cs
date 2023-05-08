@@ -22,6 +22,7 @@ namespace Projekt
     {
         public List<Recipe> Recipes;
         public List<Item> InventoryCraft;
+        public Item Crafted;
         public RecipesW(List<Recipe> R, List<Item> i)
         {
            
@@ -68,11 +69,11 @@ namespace Projekt
             bool i2 = false;
             bool i3 = false;
 
-          
 
+            string x = "";
             foreach (Item i in InventoryCraft)
             {
-              
+                x += " " + i.Name.ToLower();
                 if ((r1 == i.Name.ToLower()) && (a1 <= i.Amount)) //resource one check
                 {
                     i1 = true;
@@ -112,7 +113,7 @@ namespace Projekt
 
             }
 
-            //MessageBox.Show(r1 + " " + r2 + " " + r3);
+            MessageBox.Show(r1 + " " + r2 + " " + r3 + "\n" + x);
          
             List<Item> toremove = new List<Item>();
             if ((i1) && (i3) && (i2)) // if you have all resources
@@ -159,8 +160,8 @@ namespace Projekt
                 MessageBox.Show(t);
 
 
-                
-                InventoryCraft.Add(Tocraft.Output); // adds the output to inventory
+
+                Crafted = Tocraft.Output;
                 
                 
             }

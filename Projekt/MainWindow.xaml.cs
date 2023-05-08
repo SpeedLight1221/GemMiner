@@ -48,6 +48,7 @@ namespace Projekt
         public double Size = 100d;
         public double level = 120;
         public bool jumping = false;
+        public TimeSpan BreakTime = new TimeSpan(0, 0, 0, 0, 500);
         DispatcherTimer coolDown = new DispatcherTimer();// 
         Rectangle toBreak = null;
 
@@ -74,7 +75,7 @@ namespace Projekt
 
             JumpGravity();//calls jumpgravity  in order to avoid problems 
             Right();// calls right in order to avoid problems
-            breaktimer.Interval = new TimeSpan(0, 0, 0, 0, 500); //sets the interval for breaking blocks
+            breaktimer.Interval = BreakTime; //sets the interval for breaking blocks
             selector.Width = 100; //creates the selector
             selector.Height = 100;
             selector.Fill = new SolidColorBrush((Color.FromArgb(128, 20, 20, 220)));
@@ -83,10 +84,12 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
-            
-            Item c1 = new Item(2, "Copper", new Uri($"pack://application:,,,/Images/Icons/copper.png"), "item");
-            
+
+            Item c1 = new Item(5, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/copper bar.png"), "item");
+
+
             InventoryList.Add(c1);
+
 
 
 
@@ -212,7 +215,7 @@ namespace Projekt
         public void JumpGravityCompleted(object sender, EventArgs e)
         {
             move.Completed -= JumpGravityCompleted;
-            
+
             move.Children.Clear();
 
             if (Canvas.GetBottom(player) >= 820)
@@ -280,7 +283,7 @@ namespace Projekt
             if (Grav == true)
             {
                 move.Completed += FallGravity;
-              
+
             }
 
 
@@ -475,7 +478,7 @@ namespace Projekt
         public void cooldown(object sender, EventArgs e)
         {
             int cd = 200;
-            if(jumping == true) { cd = 750; }
+            if (jumping == true) { cd = 750; }
 
 
             jumping = false;
@@ -513,6 +516,145 @@ namespace Projekt
                     }
                 }
             }
+            #region toolCheck
+
+            string tool = "";
+            int tier = -1;
+            string[] toolInfo;
+            if (Slot1 != null)
+            {
+                toolInfo = Slot1.Name.Split(' ');
+
+                if (toolInfo.Contains("Pick"))
+                {
+                    tool = "Pick";
+                    if (toolInfo.Contains("Broken"))
+                    {
+                        tier = 0;                    
+                    }
+                    else if (toolInfo.Contains("Copper"))
+                    {
+                        tier = 1;
+                    }
+                    else if (toolInfo.Contains("Bronze"))
+                    {
+                        tier = 2;
+                    }
+                    else if (toolInfo.Contains("Iron"))
+                    {
+                        tier = 3;
+                    }
+                }
+                else if (Slot1.Name.Split(' ')[1] == "Axe")
+                {
+                    tool = "Axe";
+                    if (toolInfo.Contains("Broken"))
+                    {
+                        tier = 0;
+                    }
+                    else if (toolInfo.Contains("Copper"))
+                    {
+                        tier = 1;
+                    }
+                    else if (toolInfo.Contains("Bronze"))
+                    {
+                        tier = 2;
+                    }
+                    else if (toolInfo.Contains("Iron"))
+                    {
+                        tier = 3;
+                    }
+                }
+
+
+
+                switch ((toBreak.Tag as string)[3])
+                {
+                    case 'W':
+                        if (tool != "Axe")
+                        {
+                            BreakTime = new TimeSpan(0, 0, 0, 2,500);
+                        }
+                        else
+                        {
+                            Tiercheck();
+                        }
+                        break;
+                    case 'S':
+                    case 'C':
+                        if (tool != "Pick")
+                        {
+                           return;
+                        }
+                        else
+                        {
+                            Tiercheck();
+                        }
+                        break;
+                    case 'T':
+                        if(tier <1)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            if (tool != "Pick")
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                Tiercheck();
+                            }
+                        }
+                        break;
+                    case 'I':
+                        if (tier < 2)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            if (tool != "Pick")
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                Tiercheck();
+                            }
+                        }
+                        break;
+
+                        /* 
+                         ¨Logic for check if the player has the right tool
+                            right now it should work as follows: tool will be set to either pick , axe or nothing
+                            tier will be se acording to the tool, if there is no tool, it will be -1
+
+                        It first checks what kind of block youre mining, then which tool youre using.
+                        Must be tested: Give yourself the tools, check whether you can still mine stone w/o a pick 
+                        Check timings
+                        good luck ig
+                         
+                         
+                         */
+
+
+                }
+                    
+                
+
+
+
+
+                
+
+
+            }
+
+            #endregion
+
+
 
             breaktimer.Tick += (s, e) =>
             {
@@ -532,7 +674,25 @@ namespace Projekt
             };
             breaktimer.Start();
 
-
+            void Tiercheck()
+            {
+                switch (tier)
+                {
+                    case -1:
+                    case 0:
+                        BreakTime = new TimeSpan(0, 0, 0, 2);
+                        break;
+                    case 1:
+                        BreakTime = new TimeSpan(0, 0, 0, 1, 500);
+                        break;
+                    case 2:
+                        BreakTime = new TimeSpan(0, 0, 0, 1, 0);
+                        break;
+                    case 3:
+                        BreakTime = new TimeSpan(0, 0, 0, 0, 500);
+                        break;
+                }
+            }
         }
 
 
@@ -547,7 +707,7 @@ namespace Projekt
             switch (toAdd[3])
             {
                 case '_':
-                    return ;
+                    return;
                     break;
 
                 case 'D':
@@ -598,6 +758,19 @@ namespace Projekt
 
 
         }
+        public void AddToInventory(Item e)
+        {
+            foreach (Item i in InventoryList) //check if item of this type is already in inventory
+            {
+                if (i.Name == e.Name)
+                {
+                    i.Amount++;
+                    return;
+                }
+
+            }
+            InventoryList.Add(e);
+        }
 
 
         #endregion
@@ -638,12 +811,12 @@ namespace Projekt
             for (int i = -100; i < 100; i++)
             {
 
-                if ((SeedPlus[Math.Abs(i)] == '5')|| ((SeedPlus[Math.Abs(i)] == '8')&&(i%2==0)))
+                if ((SeedPlus[Math.Abs(i)] == '5') || ((SeedPlus[Math.Abs(i)] == '8') && (i % 2 == 0)))
                 {
                     TreeLocsX.Add(i * 100);
                     x += "_" + i * 100 + "\n";
                 }
-                
+
 
 
 
@@ -722,11 +895,11 @@ namespace Projekt
                 Canvas.SetLeft(Bedrock, 100 * i);
                 Canvas.SetBottom(Bedrock, -80 * 41);
                 MyCan.Children.Add(Bedrock);
-                
+
 
             }
 
-           
+
 
 
 
@@ -814,37 +987,37 @@ namespace Projekt
 
 
 
-            
+
 
             #region Trees
-          
+
             List<double[]> coords = new List<double[]>();//for every x coordinate for a tree, finds a Y coordinate
             List<Rectangle> FoundX = new List<Rectangle>();
 
             foreach (var TreeCheck in MyCan.Children.OfType<Rectangle>())
             {
-                if (((TreeCheck.Tag as string)[0] == 'G') && (TreeLocsX.Contains(Convert.ToInt32(Canvas.GetLeft(TreeCheck))))&&(Canvas.GetBottom(TreeCheck) > -200 ))
+                if (((TreeCheck.Tag as string)[0] == 'G') && (TreeLocsX.Contains(Convert.ToInt32(Canvas.GetLeft(TreeCheck)))) && (Canvas.GetBottom(TreeCheck) > -200))
                 {
                     e++;
 
                     FoundX.Add(TreeCheck);
-                   
+
                 }
             }
 
             List<double> DupeCheck = new List<double>();
-            foreach(Rectangle Upcheck in FoundX)
+            foreach (Rectangle Upcheck in FoundX)
             {
                 List<Rectangle> FindUp = new List<Rectangle>();
                 foreach (Rectangle Uppercheck in FoundX)
                 {
-                    if(Canvas.GetLeft(Uppercheck)== Canvas.GetLeft(Upcheck))
+                    if (Canvas.GetLeft(Uppercheck) == Canvas.GetLeft(Upcheck))
                     {
                         FindUp.Add(Uppercheck);
                     }
                 }
 
-              
+
 
                 List<Rectangle> sortList = FindUp.OrderBy(r => Canvas.GetBottom(r)).Reverse().ToList();
 
@@ -869,19 +1042,19 @@ namespace Projekt
 
 
 
-            
+
 
             GenerateTree(coords);
-            
-            
+
+
         }
 
         public void GenerateTree(List<double[]> co)
         {
 
-            
 
-            
+
+
             string text = "";
             foreach (double[] e in co)
             {
@@ -893,7 +1066,7 @@ namespace Projekt
             foreach (double[] c in co)
             {
                 double X = c[0];
-                double Y = c[1]+100 ;
+                double Y = c[1] + 100;
 
                 int height = 2;
                 if ((X / 100) % 2 == 0)
@@ -911,11 +1084,11 @@ namespace Projekt
                     wood.Tag = "GY_W";
                     wood.Name = "Wood";
                     Canvas.SetLeft(wood, X);
-                    Canvas.SetBottom(wood, Y + (i*100));
+                    Canvas.SetBottom(wood, Y + (i * 100));
                     MyCan.Children.Add(wood);
                 }
 
-                for(int i = 0; i < 7; i++)
+                for (int i = 0; i < 7; i++)
                 {
                     Rectangle leave = new Rectangle();
                     leave.Width = 100;
@@ -925,11 +1098,11 @@ namespace Projekt
                     leave.Name = "Leaves";
                     MyCan.Children.Add(leave);
 
-                    if(i <3)
+                    if (i < 3)
                     {
-                        Canvas.SetBottom(leave, (height*100)+20);
+                        Canvas.SetBottom(leave, (height * 100) + 20);
                     }
-                    else if(i < 6)
+                    else if (i < 6)
                     {
                         Canvas.SetBottom(leave, (height * 100) + 120);
                     }
@@ -940,9 +1113,9 @@ namespace Projekt
 
 
 
-                    if((i == 0)||(i == 3))
+                    if ((i == 0) || (i == 3))
                     {
-                        Canvas.SetLeft(leave, X-100);
+                        Canvas.SetLeft(leave, X - 100);
                     }
                     else if ((i == 2) || (i == 5))
                     {
@@ -1093,8 +1266,10 @@ namespace Projekt
         public void CreateRecipes()
         {
             Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"), 2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Icons/Copper Bar.png"));
+            Recipe CopperPick = new Recipe("Copper Pick", new Item(1, "Copper Pick", new Uri($"pack://application:,,,/Images/Icons/copper pick.png"), "Tool"), 1, "copper bar", 5, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/copper pick.png"));
 
             Recipes.Add(CopperBar);
+            Recipes.Add(CopperPick);
         }
 
         public void OpenCraft()
@@ -1117,7 +1292,10 @@ namespace Projekt
 
             RecipeWindow.Closing += (s, e) =>
             {
-                InventoryList = RecipeWindow.InventoryCraft;
+                if (RecipeWindow.Crafted != null)
+                {
+                    AddToInventory(RecipeWindow.Crafted);
+                }
             };
 
         }
