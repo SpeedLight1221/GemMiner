@@ -28,7 +28,7 @@
         <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="00" Canvas.Bottom="120">
 
         </Rectangle>
-        <Label x:Name="test" Width="100" Height="100" Canvas.Left="450" Canvas.Bottom="450" Panel.ZIndex="2"></Label>
+        <Label  x:Name="test" Width="100" Height="100" Canvas.Left="1050" Canvas.Bottom="750" Panel.ZIndex="9"></Label>
         <Label x:Name="test2" Background="AliceBlue" Width="100" Height="100" Canvas.Left="784" Canvas.Bottom="450" Canvas.Top="241"></Label>
 
 

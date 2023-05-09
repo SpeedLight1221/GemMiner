@@ -22,7 +22,7 @@ namespace Projekt
     {
         public List<Recipe> Recipes;
         public List<Item> InventoryCraft;
-        public Item Crafted;
+        public List<Item> Crafted = new List<Item>();
         public RecipesW(List<Recipe> R, List<Item> i)
         {
            
@@ -34,6 +34,9 @@ namespace Projekt
             
 
         }
+
+
+        
 
         private void Craft_Click(object sender, RoutedEventArgs e)
         {
@@ -161,7 +164,7 @@ namespace Projekt
 
 
 
-                Crafted = Tocraft.Output;
+                Crafted.Add(Tocraft.Output);
                 
                 
             }
@@ -170,6 +173,14 @@ namespace Projekt
 
 
 
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Key == Key.C)|| (e.Key == Key.Escape))
+            {
+                this.Close();
+            }
         }
     }
 }

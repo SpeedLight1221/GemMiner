@@ -84,11 +84,15 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
-
-            Item c1 = new Item(5, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/copper bar.png"), "item");
-
-
+            //test items
+            Item c1 = new Item(5, "Copper", new Uri($"pack://application:,,,/Images/Icons/Copper.png"), "Item");
+            Item c2 = new Item(5, "Coal", new Uri($"pack://application:,,,/Images/Icons/Coal.png"), "Item");
+            Item cp = new Item(1, "Copper Pick", new Uri($"pack://application:,,,/Images/Icons/copper pick.png"), "Tool");
+            Item ca = new Item(1, "Copper Axe", new Uri($"pack://application:,,,/Images/Icons/copper axe.png"), "Tool");
             InventoryList.Add(c1);
+            InventoryList.Add(c2);
+            InventoryList.Add(ca);
+            InventoryList.Add(cp);
 
 
 
@@ -530,11 +534,12 @@ namespace Projekt
                     tool = "Pick";
                     if (toolInfo.Contains("Broken"))
                     {
-                        tier = 0;                    
+                        tier = 0;
                     }
                     else if (toolInfo.Contains("Copper"))
                     {
                         tier = 1;
+                        
                     }
                     else if (toolInfo.Contains("Bronze"))
                     {
@@ -555,6 +560,8 @@ namespace Projekt
                     else if (toolInfo.Contains("Copper"))
                     {
                         tier = 1;
+                       
+
                     }
                     else if (toolInfo.Contains("Bronze"))
                     {
@@ -565,18 +572,22 @@ namespace Projekt
                         tier = 3;
                     }
                 }
+            }
 
-
+            if (toBreak != null)
+            {
 
                 switch ((toBreak.Tag as string)[3])
                 {
                     case 'W':
                         if (tool != "Axe")
                         {
-                            BreakTime = new TimeSpan(0, 0, 0, 2,500);
+                            BreakTime = new TimeSpan(0, 0, 0, 2, 500);
+                           
                         }
                         else
                         {
+                           
                             Tiercheck();
                         }
                         break;
@@ -584,7 +595,7 @@ namespace Projekt
                     case 'C':
                         if (tool != "Pick")
                         {
-                           return;
+                            return;
                         }
                         else
                         {
@@ -592,7 +603,7 @@ namespace Projekt
                         }
                         break;
                     case 'T':
-                        if(tier <1)
+                        if (tier < 1)
                         {
                             return;
                         }
@@ -635,26 +646,27 @@ namespace Projekt
                         Must be tested: Give yourself the tools, check whether you can still mine stone w/o a pick 
                         Check timings
                         good luck ig
-                         
-                         
+
+
                          */
 
 
                 }
-                    
-                
 
 
 
 
-                
+
+
+
+
 
 
             }
 
             #endregion
 
-
+            breaktimer.Interval = BreakTime;
 
             breaktimer.Tick += (s, e) =>
             {
@@ -680,16 +692,17 @@ namespace Projekt
                 {
                     case -1:
                     case 0:
-                        BreakTime = new TimeSpan(0, 0, 0, 2);
+                        BreakTime = new TimeSpan(0, 0, 0, 3);
                         break;
                     case 1:
-                        BreakTime = new TimeSpan(0, 0, 0, 1, 500);
+                        BreakTime = new TimeSpan(0, 0, 0,1, 500);
+                        
                         break;
                     case 2:
-                        BreakTime = new TimeSpan(0, 0, 0, 1, 0);
+                        BreakTime = new TimeSpan(0, 0, 0, 0, 750);
                         break;
                     case 3:
-                        BreakTime = new TimeSpan(0, 0, 0, 0, 500);
+                        BreakTime = new TimeSpan(0, 0, 0, 0, 300);
                         break;
                 }
             }
@@ -712,28 +725,35 @@ namespace Projekt
 
                 case 'D':
                     itemName = "Dirt";
+                    type = "Block";
                     break;
 
                 case 'S':
                     itemName = "Stone";
+                    type = "Block";
                     break;
 
                 case 'C':
                     itemName = "Copper";
+                    type = "Item";
                     break;
 
                 case 'T':
                     itemName = "Tin";
+                    type = "Item";
                     break;
 
                 case 'I':
                     itemName = "Iron";
+                    type = "Item";
                     break;
                 case 'c':
                     itemName = "Coal";
+                    type = "Item";
                     break;
                 case 'W':
                     itemName = "Plank";
+                    type = "Item";
                     break;
             }
 
@@ -764,7 +784,7 @@ namespace Projekt
             {
                 if (i.Name == e.Name)
                 {
-                    i.Amount++;
+                    i.Amount += e.Amount;
                     return;
                 }
 
@@ -1265,11 +1285,31 @@ namespace Projekt
 
         public void CreateRecipes()
         {
+            
             Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"), 2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Icons/Copper Bar.png"));
+            Recipe IronBar = new Recipe("Iron Bar", new Item(2, "Iron Bar", new Uri($"pack://application:,,,/Images/Icons/Iron Bar.png"), "Item"), 2, "iron", 2, "coal", 3, null, null, new Uri("pack://application:,,,/Images/Icons/Iron Bar.png"));
+            Recipe BronzeBar = new Recipe("Bronze Bar", new Item(2, "Bronze Bar", new Uri($"pack://application:,,,/Images/Icons/Bronze Bar.png"), "Item"), 2, "tin", 2, "copper", 2, "coal", 2, new Uri("pack://application:,,,/Images/Icons/Bronze Bar.png"));
+
+
+
             Recipe CopperPick = new Recipe("Copper Pick", new Item(1, "Copper Pick", new Uri($"pack://application:,,,/Images/Icons/copper pick.png"), "Tool"), 1, "copper bar", 5, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/copper pick.png"));
+            Recipe CopperAxe = new Recipe("Copper Axe", new Item(1, "Copper Axe", new Uri($"pack://application:,,,/Images/Icons/copper axe.png"), "Tool"), 1, "copper bar", 3, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/copper axe.png"));
+            Recipe BronzePick = new Recipe("Bronze Pick", new Item(1, "Bronze Pick", new Uri($"pack://application:,,,/Images/Icons/Bronze pick.png"), "Tool"), 1, "bronze bar", 5, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/Bronze pick.png"));
+            Recipe BronzeAxe = new Recipe("Bronze Axe", new Item(1, "Bronze Axe", new Uri($"pack://application:,,,/Images/Icons/Bronze axe.png"), "Tool"), 1, "bronze bar", 3, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/Bronze axe.png"));
+            Recipe IronPick = new Recipe("Iron Pick", new Item(1, "Iron Pick", new Uri($"pack://application:,,,/Images/Icons/Iron pick.png"), "Tool"), 1, "iron bar", 5, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/Iron pick.png"));
+            Recipe IronAxe = new Recipe("Iron Axe", new Item(1, "Iron Axe", new Uri($"pack://application:,,,/Images/Icons/Iron axe.png"), "Tool"), 1, "iron bar", 3, "plank", 3, null, null, new Uri("pack://application:,,,/Images/Icons/Iron axe.png"));
+
 
             Recipes.Add(CopperBar);
+            Recipes.Add(BronzeBar);
+            Recipes.Add(IronBar);
             Recipes.Add(CopperPick);
+            Recipes.Add(CopperAxe);
+            Recipes.Add(BronzePick);
+            Recipes.Add(BronzeAxe);
+            Recipes.Add(IronPick);
+            Recipes.Add(IronAxe);
+
         }
 
         public void OpenCraft()
@@ -1294,7 +1334,10 @@ namespace Projekt
             {
                 if (RecipeWindow.Crafted != null)
                 {
-                    AddToInventory(RecipeWindow.Crafted);
+                   foreach(Item i in RecipeWindow.Crafted)
+                    {
+                        AddToInventory(i);
+                    }
                 }
             };
 

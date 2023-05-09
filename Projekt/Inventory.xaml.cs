@@ -34,7 +34,7 @@ namespace Projekt
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.I)
+            if((e.Key == Key.I) || (e.Key == Key.Escape))
             {
                 this.Close();
             }
