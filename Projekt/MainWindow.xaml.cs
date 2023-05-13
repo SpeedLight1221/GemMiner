@@ -54,6 +54,7 @@ namespace Projekt
 
         DispatcherTimer breaktimer = new DispatcherTimer();
 
+        Dictionary<string, char> BlockTags = new Dictionary<string, char>();
 
 
         Storyboard move = new Storyboard();//create storyboard for animating
@@ -70,9 +71,6 @@ namespace Projekt
             Timeline.SetDesiredFrameRate(move, 40);
 
             level = Canvas.GetBottom(player);
-
-
-
             JumpGravity();//calls jumpgravity  in order to avoid problems 
             Right();// calls right in order to avoid problems
             breaktimer.Interval = BreakTime; //sets the interval for breaking blocks
@@ -93,6 +91,14 @@ namespace Projekt
             InventoryList.Add(c2);
             InventoryList.Add(ca);
             InventoryList.Add(cp);
+
+
+
+
+            BlockTags.Add("Dirt", 'D');
+            BlockTags.Add("Stone", 'S');
+            BlockTags.Add("Plank", 'W');
+
 
 
 
@@ -166,6 +172,12 @@ namespace Projekt
             {
                 breaktimer.Stop();
                 toBreak = null;
+            };
+
+
+            this.MouseRightButtonDown += (s, e) =>
+            {
+                Place();
             };
 
             this.MouseMove += (s, e) =>
@@ -500,6 +512,80 @@ namespace Projekt
             };
         }
 
+        #region place
+
+        public void Place()
+        {
+
+            foreach (var PlaceCheck in MyCan.Children.OfType<Rectangle>())
+            {
+
+                if ((Canvas.GetBottom(PlaceCheck) == Canvas.GetBottom(selector)) && (Canvas.GetLeft(PlaceCheck) == Canvas.GetLeft(selector)))
+                {
+                    if (PlaceCheck.Name != selector.Name)
+                    {
+                        return;
+                    }
+
+                }
+            }
+            test.Background = Brushes.YellowGreen;
+            if (Slot2 != null)
+            {
+                if (Slot2.type != "Block")
+                {
+                    return;
+                }
+
+                Rectangle nb = new Rectangle();
+                nb.Width = 100;
+                nb.Height = 100;
+                Canvas.SetBottom(nb, Canvas.GetBottom(selector));
+                Canvas.SetLeft(nb, Canvas.GetLeft(selector));
+                MyCan.Children.Add(nb);
+                nb.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri($"pack://application:,,,/Images/Ores/{Slot2.Name}.png")) };
+                nb.Tag = $"GY_{BlockTags[Slot2.Name]}___";
+
+
+                Item? toRemove = new Item(-69, "placeholder", new Uri($"pack://application:,,,/Images/Icons/old copper pick.png"),"douyoufeeltheweightofyoursins?");
+                foreach(Item i in InventoryList)
+                {
+                    if(i == Slot2)
+                    {
+                        if(i.Amount > 1)
+                        {
+                            i.Amount--;
+                        }
+                        else
+                        {
+                            toRemove = i;
+                        }
+                    }
+                }
+
+                if(toRemove.Name != "placeholder")
+                {
+                    InventoryList.Remove(toRemove);
+                    Slot2 = null;
+                    SecImg.Source = null;
+                    
+                }
+               
+
+
+
+
+            }
+
+
+        }
+
+
+
+        #endregion
+
+
+
 
 
         #region break
@@ -516,6 +602,7 @@ namespace Projekt
                         if ((Canvas.GetLeft(breakCheck) == Canvas.GetLeft(selector)) && (Canvas.GetBottom(breakCheck) == Canvas.GetBottom(selector)))
                         {
                             toBreak = breakCheck;
+                            
                         }
                     }
                 }
@@ -539,7 +626,7 @@ namespace Projekt
                     else if (toolInfo.Contains("Copper"))
                     {
                         tier = 1;
-                        
+
                     }
                     else if (toolInfo.Contains("Bronze"))
                     {
@@ -560,7 +647,7 @@ namespace Projekt
                     else if (toolInfo.Contains("Copper"))
                     {
                         tier = 1;
-                       
+
 
                     }
                     else if (toolInfo.Contains("Bronze"))
@@ -583,11 +670,11 @@ namespace Projekt
                         if (tool != "Axe")
                         {
                             BreakTime = new TimeSpan(0, 0, 0, 2, 500);
-                           
+
                         }
                         else
                         {
-                           
+
                             Tiercheck();
                         }
                         break;
@@ -695,8 +782,8 @@ namespace Projekt
                         BreakTime = new TimeSpan(0, 0, 0, 3);
                         break;
                     case 1:
-                        BreakTime = new TimeSpan(0, 0, 0,1, 500);
-                        
+                        BreakTime = new TimeSpan(0, 0, 0, 1, 500);
+
                         break;
                     case 2:
                         BreakTime = new TimeSpan(0, 0, 0, 0, 750);
@@ -753,7 +840,7 @@ namespace Projekt
                     break;
                 case 'W':
                     itemName = "Plank";
-                    type = "Item";
+                    type = "Block";
                     break;
             }
 
@@ -1285,7 +1372,7 @@ namespace Projekt
 
         public void CreateRecipes()
         {
-            
+
             Recipe CopperBar = new Recipe("Copper Bar", new Item(2, "Copper Bar", new Uri($"pack://application:,,,/Images/Icons/Copper Bar.png"), "Item"), 2, "copper", 2, "coal", 1, null, null, new Uri("pack://application:,,,/Images/Icons/Copper Bar.png"));
             Recipe IronBar = new Recipe("Iron Bar", new Item(2, "Iron Bar", new Uri($"pack://application:,,,/Images/Icons/Iron Bar.png"), "Item"), 2, "iron", 2, "coal", 3, null, null, new Uri("pack://application:,,,/Images/Icons/Iron Bar.png"));
             Recipe BronzeBar = new Recipe("Bronze Bar", new Item(2, "Bronze Bar", new Uri($"pack://application:,,,/Images/Icons/Bronze Bar.png"), "Item"), 2, "tin", 2, "copper", 2, "coal", 2, new Uri("pack://application:,,,/Images/Icons/Bronze Bar.png"));
@@ -1334,12 +1421,19 @@ namespace Projekt
             {
                 if (RecipeWindow.Crafted != null)
                 {
-                   foreach(Item i in RecipeWindow.Crafted)
+                    foreach (Item i in RecipeWindow.Crafted)
                     {
                         AddToInventory(i);
                     }
                 }
             };
+
+        }
+
+
+
+        public void TagTranslate()
+        {
 
         }
 
