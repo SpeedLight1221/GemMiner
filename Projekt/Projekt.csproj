@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Background\Backpack.png" />
     <None Remove="Images\Icons\bronze axe.png" />
     <None Remove="Images\Icons\bronze bar.png" />
     <None Remove="Images\Icons\bronze pick.png" />
@@ -36,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Background\Backpack.png" />
     <Resource Include="Images\Icons\bronze axe.png" />
     <Resource Include="Images\Icons\bronze bar.png" />
     <Resource Include="Images\Icons\bronze pick.png" />

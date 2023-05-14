@@ -14,9 +14,9 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Height="50" Width="580" Background="DarkCyan" Opacity="1" >
                         <Image Source="{Binding Image}" Height="50" Width="50" ></Image>
-                        <TextBlock x:Name ="out" Text="{Binding Output}" Width="200" TextAlignment="Center" FontSize="30"></TextBlock>
-                        <TextBlock Text="{Binding OAmount}" Width="30" TextAlignment="Center" FontSize="40"></TextBlock>
-                        <TextBlock Width="100">
+                        <TextBlock x:Name ="out" FontFamily="High Tower Text" Text="{Binding Output}" Width="200" TextAlignment="Center" FontSize="30"></TextBlock>
+                        <TextBlock Text="{Binding OAmount}" FontFamily="High Tower Text" Width="30" TextAlignment="Center" FontSize="40"></TextBlock>
+                        <TextBlock FontFamily="High Tower Text" Width="100">
                             <Run Text="{Binding Res1}"></Run>
                             <Run Text="{Binding Amount1}"></Run>
                             <LineBreak/>
@@ -28,7 +28,7 @@
                             
                             
                         </TextBlock>
-                        <Button Tag="{Binding Name}" Content="Craft" Width="50" Height="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Craft_Click"/>
+                        <Button  FontFamily="High Tower Text" Tag="{Binding Name}" Content="Craft" Width="50" Height="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Craft_Click"/>
 
 
                     </StackPanel>

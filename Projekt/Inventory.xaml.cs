@@ -44,7 +44,7 @@ namespace Projekt
                 {
 
                     slot1 = InvList.SelectedItem as Item;
-                    Test.Content = slot1;
+                    
                 }
                 else
                 {
@@ -56,7 +56,7 @@ namespace Projekt
                 if ((InvList.SelectedItem as Item).type == "Block")
                 {
                     slot2 = InvList.SelectedItem as Item;
-                    Test.Content = slot2;
+                   
                 }
             }
         }
