@@ -369,7 +369,7 @@ namespace Projekt
 
 
             }
-            if (Canvas.GetLeft(player) > 1500) { ShiftScreen(1); }
+            if (Canvas.GetLeft(player) >= 1810) { ShiftScreen(1); }
 
         }
 
@@ -435,7 +435,7 @@ namespace Projekt
                 Animation(Canvas.GetLeft(player), Canvas.GetLeft(player) - 100, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
 
             }
-            if (Canvas.GetLeft(player) < 100) { ShiftScreen(0); }
+            if (Canvas.GetLeft(player) < 0) { ShiftScreen(0); }
 
 
         }
@@ -1258,7 +1258,7 @@ namespace Projekt
                         if ((collCheck.Tag as string)[0] != '_')
                         {
 
-                            Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) - 1500);
+                            Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) - 1900);
                         }
 
 
@@ -1272,7 +1272,7 @@ namespace Projekt
                     {
                         if ((collCheck.Tag as string)[0] != '_')
                         {
-                            Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) + 1500);
+                            Canvas.SetLeft(collCheck, Canvas.GetLeft(collCheck) + 1900);
                         }
 
                     }

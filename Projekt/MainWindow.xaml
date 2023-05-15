@@ -17,11 +17,11 @@
 
     <Canvas x:Name="MyCan">
 
-        <Rectangle x:Name="Primary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="20" Fill="Red" Panel.ZIndex="5">
+        <Rectangle x:Name="Primary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="20" Fill="Gray" Panel.ZIndex="5">
 
         </Rectangle>
         <Image  Panel.ZIndex="6" x:Name="PrimImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="30"></Image>
-        <Rectangle Panel.ZIndex="5" x:Name="Secondary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="220" Fill="Red">
+        <Rectangle Panel.ZIndex="5" x:Name="Secondary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="220" Fill="Gray">
 
         </Rectangle>
         <Image Panel.ZIndex="6" x:Name="SecImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="230"></Image>
