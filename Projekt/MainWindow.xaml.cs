@@ -144,6 +144,7 @@ namespace Projekt
                         Left();
                         break;
 
+                  
 
 
                 }
@@ -234,7 +235,7 @@ namespace Projekt
 
             move.Children.Clear();
 
-            if (Canvas.GetBottom(player) >= 820)
+            if (Canvas.GetBottom(player) > 820)
             {
                 test.Background = Brushes.Red;
                 ShiftScreen(3);
@@ -291,7 +292,7 @@ namespace Projekt
                 Canvas.SetBottom(player, y2);
 
                 jumping = false;
-
+              
 
             };
 
@@ -442,6 +443,13 @@ namespace Projekt
 
         public void FallGravity(object sender, EventArgs e)
         {
+            double yy = Canvas.GetBottom(player) - 100;
+            yy = Canvas.GetBottom(player) - 100;
+            if (xxx == 42069)
+            {
+                yy = 20;
+            }
+
             double time = 1;
             if (tse == true)
             {
@@ -470,8 +478,15 @@ namespace Projekt
                         {
                             player.Fill = Brushes.Yellow;
 
-                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), Canvas.GetBottom(player) - 100, false, time);
+
+
+
+
+                            test.Content = yy;
+                            Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), yy, false, time);
                             move.Completed += levelCheck;
+                           
+                            
                             if (Canvas.GetBottom(player) < 120) { ShiftScreen(2); }
                             return;
 
@@ -480,6 +495,7 @@ namespace Projekt
                     }
                 }
             }
+            
 
         } // ensures that the player falls when they move 
 
@@ -1287,7 +1303,7 @@ namespace Projekt
                     {
                         if ((collCheck.Tag as string)[0] != '_')
                         {
-                            Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) + 800);
+                            Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) + 900);
                         }
 
                     }
@@ -1295,6 +1311,15 @@ namespace Projekt
                 }
                 else if (direction == 3)
                 {
+                    xxx = 42069;
+                    DispatcherTimer reset = new DispatcherTimer();
+                    reset.Interval = new TimeSpan(0, 0, 0, 0, 250);
+                    reset.Tick += (s, e) =>
+                    {
+                        xxx = 0;
+                        reset.Stop();
+                    };
+                    reset.Start();
                     player.BeginAnimation(Canvas.BottomProperty, null);
                     Storyboard fall = new Storyboard();
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
@@ -1302,17 +1327,16 @@ namespace Projekt
                         if ((collCheck.Tag as string)[0] != '_')
                         {
 
-                            if (collCheck.Name != "player")
+                            if (collCheck.Tag == "Player")
                             {
 
-                                Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 800);
+                               
                             }
                             else
                             {
+                                Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 900);
 
 
-
-                                tse = true;
 
 
 
