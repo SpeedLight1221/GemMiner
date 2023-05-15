@@ -25,7 +25,7 @@
 
         </Rectangle>
         <Image Panel.ZIndex="6" x:Name="SecImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="230"></Image>
-        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="00" Canvas.Bottom="120">
+        <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="10" Canvas.Bottom="120">
 
         </Rectangle>
         <Label  x:Name="test" Width="100" Height="100" Canvas.Left="1050" Canvas.Bottom="750" Panel.ZIndex="9"></Label>

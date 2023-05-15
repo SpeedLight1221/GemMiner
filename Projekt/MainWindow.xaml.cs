@@ -920,7 +920,7 @@ namespace Projekt
 
                 if ((SeedPlus[Math.Abs(i)] == '5') || ((SeedPlus[Math.Abs(i)] == '8') && (i % 2 == 0)))
                 {
-                    TreeLocsX.Add(i * 100);
+                    TreeLocsX.Add(10 + (100 * i));
                     x += "_" + i * 100 + "\n";
                 }
 
@@ -972,7 +972,7 @@ namespace Projekt
 
                     }
                     MyCan.Children.Add(stone);
-                    Canvas.SetLeft(stone, 100 * i);
+                    Canvas.SetLeft(stone,10+ (100 * i));
                     Canvas.SetBottom(stone, 20 - (100 * j));
 
 
@@ -989,7 +989,7 @@ namespace Projekt
                 baseDirt.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Dirt.png")) };
                 baseDirt.Tag = "GY_D";
                 baseDirt.Name = "Dirt";
-                Canvas.SetLeft(baseDirt, 100 * i);
+                Canvas.SetLeft(baseDirt, 10 + (100 * i));
                 Canvas.SetBottom(baseDirt, -80);
                 MyCan.Children.Add(baseDirt);
 
@@ -999,7 +999,7 @@ namespace Projekt
                 Bedrock.Fill = Brushes.Black;
                 Bedrock.Tag = "GYU_";
                 Bedrock.Name = "Bedrock";
-                Canvas.SetLeft(Bedrock, 100 * i);
+                Canvas.SetLeft(Bedrock, 10 + (100 * i));
                 Canvas.SetBottom(Bedrock, -80 * 41);
                 MyCan.Children.Add(Bedrock);
 
