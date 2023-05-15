@@ -6,29 +6,33 @@
         xmlns:local="clr-namespace:Projekt"
         mc:Ignorable="d"
         Title="RecipesW" Height="450" Width="600"
-        KeyDown="Window_KeyDown">
-    <Grid Background="Gray" >
-        <Label Background="Red" Height="50" x:Name="Test" RenderTransformOrigin="0.495,0.496"></Label>
+        KeyDown="Window_KeyDown"
+         Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        >
+    <Grid >
+        <Image Source="Images\Background\crafting.png"></Image>
         <ListView Background="Transparent" x:Name="RecList">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Height="50" Width="580" Background="DarkCyan" Opacity="1" >
+                    <StackPanel Orientation="Horizontal" Height="50" Width="550"  Background="Gray" Opacity="0.75" >
                         <Image Source="{Binding Image}" Height="50" Width="50" ></Image>
                         <TextBlock x:Name ="out" FontFamily="High Tower Text" Text="{Binding Output}" Width="200" TextAlignment="Center" FontSize="30"></TextBlock>
                         <TextBlock Text="{Binding OAmount}" FontFamily="High Tower Text" Width="30" TextAlignment="Center" FontSize="40"></TextBlock>
                         <TextBlock FontFamily="High Tower Text" Width="100">
-                            <Run Text="{Binding Res1}"></Run>
-                            <Run Text="{Binding Amount1}"></Run>
+                            <Run FontSize="15" Text="{Binding Res1}"></Run>
+                            <Run FontSize="15" Text="{Binding Amount1}"></Run>
                             <LineBreak/>
-                            <Run Text="{Binding Res2}"></Run>
-                            <Run Text="{Binding Amount2}"></Run>
+                            <Run FontSize="15" Text="{Binding Res2}"></Run>
+                            <Run FontSize="15" Text="{Binding Amount2}"></Run>
                              <LineBreak/>
-                            <Run Text="{Binding Res3}"></Run>
-                            <Run Text="{Binding Amount3}"></Run>
-                            
-                            
+                            <Run FontSize="15" Text="{Binding Res3}"></Run>
+                            <Run FontSize="15" Text="{Binding Amount3}"></Run>
+
+
                         </TextBlock>
-                        <Button  FontFamily="High Tower Text" Tag="{Binding Name}" Content="Craft" Width="50" Height="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Craft_Click"/>
+                        <Button Background="#683C1E" FontSize="25"  FontFamily="High Tower Text" Tag="{Binding Name}" Content="Craft" Width="70" Height="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Craft_Click"/>
 
 
                     </StackPanel>
