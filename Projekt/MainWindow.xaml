@@ -17,19 +17,30 @@
 
     <Canvas x:Name="MyCan">
 
-        <Rectangle x:Name="Primary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="20" Fill="Gray" Panel.ZIndex="5">
+        <Rectangle  x:Name="Gem" Tag="____________" Panel.ZIndex="5" Width="620" Height="120" Fill="Black" Opacity=".2" Canvas.Top="20" Canvas.Left="650" >
+            
+        </Rectangle>
+        <Image x:Name="SaphireIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="670" Source="Images/Icons/Saphire.png" Opacity="0.1"></Image>
+        <Image x:Name="RubyIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="790" Source="Images/Icons/Ruby.png" Opacity="0.1"></Image>
+        <Image x:Name="EmeraldIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="910" Source="Images/Icons/Emerald.png" Opacity="0.1"></Image>
+        <Image x:Name="OpalIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="1030" Source="Images/Icons/Opal.png" Opacity="0.1"></Image>
+        <Image x:Name="DiamondIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="1150" Source="Images/Icons/Diamond.png" Opacity="0.1"></Image>
+
+
+
+
+
+        <Rectangle x:Name="Primary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="20" Fill="Black" Opacity=".2" Panel.ZIndex="5">
 
         </Rectangle>
         <Image  Panel.ZIndex="6" x:Name="PrimImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="30"></Image>
-        <Rectangle Panel.ZIndex="5" x:Name="Secondary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="220" Fill="Gray">
+        <Rectangle Panel.ZIndex="5" x:Name="Secondary" Tag="___________" Width="150" Height="150" Canvas.Top="20" Canvas.Left="220" Fill="Black" Opacity=".2">
 
         </Rectangle>
         <Image Panel.ZIndex="6" x:Name="SecImg" Width="130" Height="130" Canvas.Top="30" Canvas.Left="230"></Image>
         <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="10" Canvas.Bottom="120">
 
         </Rectangle>
-        <Label  x:Name="test" Width="100" Height="100" Canvas.Left="1050" Canvas.Bottom="750" Panel.ZIndex="9"></Label>
-        <Label x:Name="test2" Background="AliceBlue" Width="100" Height="100" Canvas.Left="784" Canvas.Bottom="450" Canvas.Top="241"></Label>
 
 
 

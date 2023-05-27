@@ -10,6 +10,7 @@
          Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
+        Topmost="True"
         >
     <Grid >
         <Image Source="Images\Background\crafting.png"></Image>

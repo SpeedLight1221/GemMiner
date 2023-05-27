@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+
 namespace Projekt
 {
     /// <summary>
@@ -36,21 +37,47 @@ namespace Projekt
         public List<Item> InventoryList = new List<Item>();
 
         public bool ShiftCD = false;
-        int leftScreen = 1;
+    
         public char facing = 'd';//l-left r-right t-top d-down
         public bool CD = false;
         bool tess = false;
         bool down = false;
         int count = 0;
-        int xxx = 0;
+        
         public bool blockMove = false;
-        bool moving = false;
+        public bool moving = false;
         public double Size = 100d;
         public double level = 120;
         public bool jumping = false;
         public TimeSpan BreakTime = new TimeSpan(0, 0, 0, 0, 500);
         DispatcherTimer coolDown = new DispatcherTimer();// 
         Rectangle toBreak = null;
+
+        public bool Overlay = false;
+
+
+        //Completion CHecks
+
+        public bool ADiamond = false;
+        public bool AOpal = false;
+        public bool AEmerald = false;
+        public bool ASaphire = false;
+        public bool ARuby = false;
+
+        //Gen Checks
+
+        public bool GDiamond = false;
+        public bool GOpal = false;
+        public bool GEmerald = false;
+        public bool GSaphire = false;
+        public bool GRuby = false;
+
+        public DateTime Start;
+
+
+
+
+
 
         DispatcherTimer breaktimer = new DispatcherTimer();
 
@@ -92,6 +119,8 @@ namespace Projekt
             InventoryList.Add(ca);
             InventoryList.Add(cp);
 
+            player.Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/Images/Characters/Player/Right.png")));
+
 
 
 
@@ -101,7 +130,7 @@ namespace Projekt
 
 
 
-
+            
 
 
             #region keys
@@ -116,12 +145,14 @@ namespace Projekt
 
                 if (e.Key == Key.I)
                 {
+                    if (Overlay) { return; }
                     OpenInventory();
 
 
                 }
                 else if (e.Key == Key.C)
                 {
+                    if (Overlay) { return; }
                     OpenCraft();
                 }
 
@@ -134,22 +165,32 @@ namespace Projekt
 
                         break;
                     case Key.D:
-
+                        player.Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/Images/Characters/Player/Right.png")));
                         Right();
 
 
 
                         break;
                     case Key.A:
+                        player.Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/Images/Characters/Player/lleft.png")));
                         Left();
                         break;
+                    case Key.T:
+                        ADiamond = true;
+                        AEmerald = true;
+                        AOpal = true;
+                        ARuby = true;
+                        ASaphire = true;
+                        CheckWin();
+                        break;
+                   
 
                   
 
 
                 }
                 MoveCursor();
-                test.Content = Canvas.GetBottom(player);
+                
                 down = true;
 
             };
@@ -237,7 +278,7 @@ namespace Projekt
 
             if (Canvas.GetBottom(player) > 820)
             {
-                test.Background = Brushes.Red;
+                
                 ShiftScreen(3);
             }
 
@@ -335,7 +376,7 @@ namespace Projekt
                             JumpGravityCompleted(new object(), new EventArgs());
                             move.Stop();
                             // Canvas.SetBottom(player, level+Size);
-                            test.Content += "x";
+                           
                             //Canvas.SetLeft(player, Canvas.GetLeft(control));
 
                             Animation(Canvas.GetLeft(player), Canvas.GetLeft(control), Canvas.GetBottom(player), level + Size, true, 0.2);
@@ -402,7 +443,7 @@ namespace Projekt
                             JumpGravityCompleted(new object(), new EventArgs());
                             move.Stop();
                             // Canvas.SetBottom(player, level+Size);
-                            test.Content += "x";
+                           
                             //Canvas.SetLeft(player, Canvas.GetLeft(control));
 
                             Animation(Canvas.GetLeft(player), Canvas.GetLeft(control), Canvas.GetBottom(player), level + Size, true, 0.2);
@@ -436,7 +477,7 @@ namespace Projekt
                 Animation(Canvas.GetLeft(player), Canvas.GetLeft(player) - 100, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
 
             }
-            if (Canvas.GetLeft(player) < 0) { ShiftScreen(0); }
+            if (Canvas.GetLeft(player) <= 10) { ShiftScreen(0); }
 
 
         }
@@ -445,10 +486,7 @@ namespace Projekt
         {
             double yy = Canvas.GetBottom(player) - 100;
             yy = Canvas.GetBottom(player) - 100;
-            if (xxx == 42069)
-            {
-                yy = 20;
-            }
+          
 
             double time = 1;
             if (tse == true)
@@ -456,7 +494,7 @@ namespace Projekt
                 time = 0.01;
             }
 
-
+            // ----------------- Implent that if count is 1 then shift to bottom
             foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
             {
                 if (((collCheck.Tag as string)[0] == 'G') && ((collCheck.Tag as string)[0] != '_'))
@@ -476,13 +514,18 @@ namespace Projekt
                     {
                         if ((Canvas.GetBottom(collCheck) == Canvas.GetBottom(player) - (Size * i)) && (Canvas.GetLeft(player) == Canvas.GetLeft(collCheck)))//zjistí zda existuje block který je na stejné x souřadnici jako a hráč ale o blok níž
                         {
-                            player.Fill = Brushes.Yellow;
+                            
 
 
+                            if(count == 1)
+                            {
+                                yy = 20;
+                                count = 0;
+                               
+                            }
 
 
-
-                            test.Content = yy;
+                         
                             Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), yy, false, time);
                             move.Completed += levelCheck;
                            
@@ -545,7 +588,7 @@ namespace Projekt
 
                 }
             }
-            test.Background = Brushes.YellowGreen;
+         
             if (Slot2 != null)
             {
                 if (Slot2.type != "Block")
@@ -611,7 +654,7 @@ namespace Projekt
 
             foreach (var breakCheck in MyCan.Children.OfType<Rectangle>())
             {
-                if ((breakCheck.Tag as string)[2] != 'U')
+                if (((breakCheck.Tag as string)[2] != 'U')&&(breakCheck.Tag as string != "Player"))
                 {
                     if ((breakCheck.Tag as string)[0] != '_')
                     {
@@ -739,6 +782,20 @@ namespace Projekt
                             }
                         }
                         break;
+                    case '1':// The Legendary Gems
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                        if (tool != "Pick")
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            Tiercheck();
+                        }
+                        break;
 
                         /* 
                          ¨Logic for check if the player has the right tool
@@ -858,6 +915,37 @@ namespace Projekt
                     itemName = "Plank";
                     type = "Block";
                     break;
+                case '1':// The Legendary Gems //Gem OverWrite 1-Saphire 2-ruby 3-Emerald 4-Opal 5-DIamond
+                    ASaphire = true;
+                    SaphireIm.Opacity = 1;
+                    CheckWin();
+                    return;
+                    break;
+                case '2':
+                    ARuby = true;
+                    RubyIm.Opacity = 1;
+                    CheckWin();
+                    return;
+                    break;
+                case '3':
+                    AEmerald = true;
+                    EmeraldIm.Opacity = 1;
+                    CheckWin();
+                    return;
+                    break;
+                case '4':
+                    AOpal = true;
+                    OpalIm.Opacity = 1;
+                    CheckWin();
+                    return;
+                    break;
+                case '5':
+                    ADiamond = true;
+                    DiamondIm.Opacity = 1;
+                    CheckWin();
+                    return;
+
+                    break;
             }
 
 
@@ -929,22 +1017,39 @@ namespace Projekt
             List<int> TreeLocsX = new List<int>();
 
 
-            string x = "";
+         
             int k = 0;
+
+
             for (int i = -100; i < 100; i++)
             {
 
                 if ((SeedPlus[Math.Abs(i)] == '5') || ((SeedPlus[Math.Abs(i)] == '8') && (i % 2 == 0)))
                 {
-                    TreeLocsX.Add(10 + (100 * i));
-                    x += "_" + i * 100 + "\n";
+                    if((i > 5 )||( i < -5))
+                    {
+                        TreeLocsX.Add(10 + (100 * i));
+                       
+                    }
+
+                   
                 }
+
+                string RubX = Convert.ToString(SeedPlus[78]) + Convert.ToString(SeedPlus[8]);
+                
+                string EmX = Convert.ToString(SeedPlus[108]) + Convert.ToString(SeedPlus[9]);
+                
+                string OpX = Convert.ToString(SeedPlus[8]) + Convert.ToString(SeedPlus[14]);
+                
+                string DiaX = Convert.ToString(SeedPlus[199]) + Convert.ToString(SeedPlus[16]);
+                
 
 
 
 
                 for (int j = 2; j < 40; j++)
                 {
+                   
 
                     if (k + 1 < SeedPlus.Length)
                     {
@@ -987,6 +1092,61 @@ namespace Projekt
                         stone.Fill = Brushes.Gray;
 
                     }
+
+
+
+                    
+                    if(GSaphire == false)
+                    {
+                        if((i == 5)&&(j == 8))
+                        {
+                            stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Saphire.png")) };
+                            stone.Tag = "GY_1";
+                            GSaphire = true;
+                        }
+                    }
+
+                    if (GRuby == false)
+                    {
+                        if ((i == int.Parse(RubX)) && (j == 38))//38
+                        {
+                            stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Ruby.png")) };
+                            stone.Tag = "GY_2";
+                            GRuby = true;
+                        }
+                    }
+                    if (GEmerald == false)
+                    {
+                        if ((i == int.Parse(EmX)) && (j == 34))//34
+                        {
+                            stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Emerald.png")) };
+                            stone.Tag = "GY_3";
+                            GEmerald = true;
+                        }
+                    }
+                    if (GOpal == false)
+                    {
+                        if ((i == int.Parse(OpX)) && (j == 31))//31
+                        {
+                            stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Opal.png")) };
+                            stone.Tag = "GY_4";
+                            GOpal = true;
+                        }
+                    }
+                    if (GDiamond == false)
+                    {
+                        if ((i == int.Parse(DiaX)) && (j == 37))//37
+                        {
+                            stone.Fill = new ImageBrush { ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Ores/Diamond.png")) };
+                            stone.Tag = "GY_5";
+                            GDiamond = true;
+                        }
+                    }
+
+                     
+
+
+
                     MyCan.Children.Add(stone);
                     Canvas.SetLeft(stone,10+ (100 * i));
                     Canvas.SetBottom(stone, 20 - (100 * j));
@@ -1016,7 +1176,7 @@ namespace Projekt
                 Bedrock.Tag = "GYU_";
                 Bedrock.Name = "Bedrock";
                 Canvas.SetLeft(Bedrock, 10 + (100 * i));
-                Canvas.SetBottom(Bedrock, -80 * 41);
+                Canvas.SetBottom(Bedrock, 20 - (100 * 41));
                 MyCan.Children.Add(Bedrock);
 
 
@@ -1168,7 +1328,7 @@ namespace Projekt
 
 
             GenerateTree(coords);
-
+           
 
         }
 
@@ -1183,9 +1343,9 @@ namespace Projekt
             {
                 text += " " + e[0] + "\n ";
             }
-            MessageBox.Show(text);
+          
 
-            test.Content = ".-." + co.Count() + "ss" + e;
+           
             foreach (double[] c in co)
             {
                 double X = c[0];
@@ -1257,7 +1417,7 @@ namespace Projekt
 
 
 
-
+            Start = DateTime.Now;
         }
         #endregion
 
@@ -1280,7 +1440,7 @@ namespace Projekt
 
 
                     }
-                    Animation(Canvas.GetLeft(player), 0, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
+                    Animation(Canvas.GetLeft(player), 10, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
                 }
                 else if (direction == 0)//left
                 {
@@ -1292,7 +1452,7 @@ namespace Projekt
                         }
 
                     }
-                    Animation(Canvas.GetLeft(player), 1400, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
+                    Animation(Canvas.GetLeft(player), 1810, Canvas.GetBottom(player), Canvas.GetBottom(player), true, 0.2);
 
                 }
                 else if (direction == 2)//down
@@ -1309,42 +1469,41 @@ namespace Projekt
                     }
 
                 }
-                else if (direction == 3)
+                else if (direction == 3)// up
                 {
-                    xxx = 42069;
-                    DispatcherTimer reset = new DispatcherTimer();
-                    reset.Interval = new TimeSpan(0, 0, 0, 0, 250);
-                    reset.Tick += (s, e) =>
-                    {
-                        xxx = 0;
-                        reset.Stop();
-                    };
-                    reset.Start();
-                    player.BeginAnimation(Canvas.BottomProperty, null);
-                    Storyboard fall = new Storyboard();
+
+                    
+
+
                     foreach (var collCheck in MyCan.Children.OfType<Rectangle>())
                     {
                         if ((collCheck.Tag as string)[0] != '_')
                         {
 
-                            if (collCheck.Tag == "Player")
+                            if ((collCheck.Tag) as string == "Player")
                             {
-
-                               
+                                
                             }
                             else
                             {
                                 Canvas.SetBottom(collCheck, Canvas.GetBottom(collCheck) - 900);
-
-
-
-
-
                             }
                         }
 
 
                     }
+
+                    DispatcherTimer Shift = new DispatcherTimer();
+                    Shift.Interval = new TimeSpan(0, 0, 0, 0, 250);
+                    Shift.Tick += (s, e) =>
+                    {
+                       
+                        Animation(Canvas.GetLeft(player), Canvas.GetLeft(player), Canvas.GetBottom(player), 20, false, 0.01);
+                        Shift.Stop();
+                    };
+
+
+                    Shift.Start();
 
 
 
@@ -1362,6 +1521,7 @@ namespace Projekt
         {
             Inventory Inv = new Inventory(InventoryList);
             blockMove = true;
+            Overlay = true;
             Inv.Show();
 
             Inv.Closing += (s, e) =>
@@ -1373,6 +1533,7 @@ namespace Projekt
             Inv.Closed += (s, e) =>
             {
                 blockMove = false;
+                Overlay = false;
             };
 
         }
@@ -1426,7 +1587,7 @@ namespace Projekt
         public void OpenCraft()
         {
 
-
+            Overlay = true;
             if (Recipes[0].Name == "ph")
             {
                 Recipes.RemoveAt(0);
@@ -1452,14 +1613,27 @@ namespace Projekt
                 }
             };
 
+            RecipeWindow.Closed += (s, e) =>
+            {
+                Overlay = false;
+            };
+
         }
 
 
-
-        public void TagTranslate()
+        public void CheckWin()
         {
+            if((ASaphire == true)&& (ARuby == true) && (AEmerald == true) && (AOpal == true) && (ADiamond == true))
+            {
 
+                TimeSpan End = DateTime.Now.Subtract(Start);
+                MessageBox.Show($"You won \n Time: {End.Hours}:{End.Minutes}:{End.Seconds}:{End.Milliseconds}");
+                System.Environment.Exit(1);
+
+                
+            }
         }
+        
 
 
     }

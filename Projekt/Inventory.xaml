@@ -11,7 +11,8 @@
         AllowsTransparency="True"
         WindowStyle="None"
         KeyDown="Window_KeyDown"
-        Background="Transparent">
+        Background="Transparent"
+         Topmost="True">
     <Grid  >
         <Image Source="Images\Background\Backpack.png"></Image>
         <ListView Background="Transparent"  x:Name="InvList" Width="430" Height="430" BorderThickness="0">
