@@ -30,6 +30,9 @@ namespace Projekt
         public Item Slot1;
         public Item Slot2;
 
+      
+        public bool title = true;
+
         public List<Recipe> Recipes = new List<Recipe>();
         public Recipe PH = new Recipe("ph", new Item(0, "h", new Uri($"pack://application:,,,/Images/Icons/0.png"), "None"), 0, "e", 0, "i", 0, null, 0, new Uri("pack://application:,,,/Images/Ores/0.png"));
 
@@ -43,8 +46,11 @@ namespace Projekt
         bool tess = false;
         bool down = false;
         int count = 0;
+
+        public Button Exit;
+        public Button Play;
         
-        public bool blockMove = false;
+        public bool blockMove = true;
         public bool moving = false;
         public double Size = 100d;
         public double level = 120;
@@ -73,12 +79,6 @@ namespace Projekt
         public bool GRuby = false;
 
         public DateTime Start;
-
-
-
-
-
-
         DispatcherTimer breaktimer = new DispatcherTimer();
 
         Dictionary<string, char> BlockTags = new Dictionary<string, char>();
@@ -87,14 +87,13 @@ namespace Projekt
         Storyboard move = new Storyboard();//create storyboard for animating
         Rectangle selector = new Rectangle();
 
-
         public bool blockedY = false;
         public MainWindow()
         {
             InitializeComponent();
             Recipes.Add(PH);
             CreateRecipes();
-            Generate();//Generates the world
+            
             Timeline.SetDesiredFrameRate(move, 40);
 
             level = Canvas.GetBottom(player);
@@ -109,14 +108,12 @@ namespace Projekt
             Canvas.SetBottom(selector, Canvas.GetBottom(player));
             selector.Tag = "__U____";
 
-            //test items
-            Item c1 = new Item(5, "Copper", new Uri($"pack://application:,,,/Images/Icons/Copper.png"), "Item");
-            Item c2 = new Item(5, "Coal", new Uri($"pack://application:,,,/Images/Icons/Coal.png"), "Item");
-            Item cp = new Item(1, "Copper Pick", new Uri($"pack://application:,,,/Images/Icons/copper pick.png"), "Tool");
-            Item ca = new Item(1, "Copper Axe", new Uri($"pack://application:,,,/Images/Icons/copper axe.png"), "Tool");
-            InventoryList.Add(c1);
-            InventoryList.Add(c2);
-            InventoryList.Add(ca);
+            //Start item
+            
+            Item cp = new Item(1, "Broken Copper Pick", new Uri($"pack://application:,,,/Images/Icons/old copper pick.png"), "Tool");
+
+   
+
             InventoryList.Add(cp);
 
             player.Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/Images/Characters/Player/Right.png")));
@@ -155,6 +152,40 @@ namespace Projekt
                     if (Overlay) { return; }
                     OpenCraft();
                 }
+                else if(e.Key == Key.Escape)
+                {
+                    if(blockMove == false)
+                    {
+                        blockMove = true;
+               
+                        Canvas.SetTop(TitleImg, 116);
+
+
+
+
+                        MyCan.Children.Add(Play);
+                        MyCan.Children.Add(Exit);
+                    }
+                    else
+                    {
+                       blockMove = false;
+                      
+                        Canvas.SetTop(TitleImg, 2000);
+
+                        Exit = ExitBtn;
+                        Play = PlayBtn;
+
+                        MyCan.Children.Remove(PlayBtn);
+                        MyCan.Children.Remove(ExitBtn);
+                    }
+                }
+                else if(e.Key == Key.H)
+                {
+                    MessageBox.Show("Press D/A for Movement \n Press Space for Jumping \n Press C to open Crafting Menu \n Press I to show Inventory \n Press Esc to Pause \n Left click to Mine \n Right Click to Place \n \n Your goal is to collect the five Legendary Gems! Good Luck!");
+                }
+
+               
+                
 
 
                 if (blockMove == true) { return; }
@@ -175,14 +206,7 @@ namespace Projekt
                         player.Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/Images/Characters/Player/lleft.png")));
                         Left();
                         break;
-                    case Key.T:
-                        ADiamond = true;
-                        AEmerald = true;
-                        AOpal = true;
-                        ARuby = true;
-                        ASaphire = true;
-                        CheckWin();
-                        break;
+                   
                    
 
                   
@@ -198,6 +222,7 @@ namespace Projekt
 
             this.KeyUp += (s, e) =>//fix  breakign
             {
+                if (blockMove == true) { return; }
                 down = false;
 
 
@@ -206,12 +231,14 @@ namespace Projekt
 
             this.MouseLeftButtonDown += (s, e) => //mouse btns
             {
+                if (blockMove == true) { return; }
 
                 Break();
             };
 
             this.MouseLeftButtonUp += (s, e) => //mouse btns
             {
+                if (blockMove == true) { return; }
                 breaktimer.Stop();
                 toBreak = null;
             };
@@ -219,11 +246,13 @@ namespace Projekt
 
             this.MouseRightButtonDown += (s, e) =>
             {
+                if (blockMove == true) { return; }
                 Place();
             };
 
             this.MouseMove += (s, e) =>
             {
+                if (blockMove == true) { return; }
                 MoveCursor();
 
             };
@@ -1633,9 +1662,50 @@ namespace Projekt
                 
             }
         }
-        
+
+        private void ExitBtn_Click(object sender, RoutedEventArgs e)
+        {
+           
+            MessageBoxResult result = MessageBox.Show("Are you sure?","Exit",MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if(result == MessageBoxResult.Yes)
+            {
+                this.Close();
+
+            }
+            else if(result == MessageBoxResult.No)
+            {
+               
+            }
+        }
+
+        private void PlayBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+            if(title == true)
+            {
+                Generate();
+            }
+
+            blockMove = false;
+            title = false;
+            Canvas.SetTop(TitleImg, 2000);
+          
+            Panel.SetZIndex(Title,-2);
+            Exit = ExitBtn;
+            Play = PlayBtn;
+
+            MyCan.Children.Remove(PlayBtn);
+            MyCan.Children.Remove(ExitBtn);
+
+            
 
 
+
+
+            
+
+        }
     }
 }
 

@@ -15,10 +15,18 @@
        >
 
 
-    <Canvas x:Name="MyCan">
+    <Canvas  x:Name="MyCan">
+        <TextBlock Panel.ZIndex="9" Text="Press  'H' for Help!" Canvas.Left="1438" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Ellipse x:Name="black" Width="2200" Height="1292" Fill="LightGray" Canvas.Left="-332" Canvas.Top="-190" HorizontalAlignment="Center" VerticalAlignment="Top" Opacity="0.4" Panel.ZIndex="-1"></Ellipse>
+        <Image x:Name="TitleImg" Source="Images/Background/Title.png" Height="246" Width="600" Panel.ZIndex="8" Canvas.Left="468" Canvas.Bottom="618" Canvas.Top="116" HorizontalAlignment="Center" VerticalAlignment="Top" ></Image>
+        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="618" Canvas.Top="564" HorizontalAlignment="Left" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Center" FontFamily="High Tower Text" Content="Play" FontSize="50" FontWeight="Bold" x:Name="PlayBtn" Click="PlayBtn_Click"></Button>
+        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="618" Canvas.Top="663" HorizontalAlignment="Center" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Exit" FontSize="50" FontWeight="Bold" x:Name="ExitBtn" Click="ExitBtn_Click"></Button>
 
-        <Rectangle  x:Name="Gem" Tag="____________" Panel.ZIndex="5" Width="620" Height="120" Fill="Black" Opacity=".2" Canvas.Top="20" Canvas.Left="650" >
-            
+        <Image Source="Images/Background/sky.png" x:Name="Title" Width="{Binding ActualWidth, ElementName=MyCan}" Height="869" Canvas.Left="0" Panel.ZIndex="7" Canvas.Bottom="0" Canvas.Top="0" HorizontalAlignment="Center" VerticalAlignment="Top"></Image>
+
+
+        <Rectangle  x:Name="Gem" Tag="________" Panel.ZIndex="5" Width="620" Height="120" Fill="Black" Opacity=".2" Canvas.Top="20" Canvas.Left="650" >
+
         </Rectangle>
         <Image x:Name="SaphireIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="670" Source="Images/Icons/Saphire.png" Opacity="0.1"></Image>
         <Image x:Name="RubyIm" Height="100" Width="100" Panel.ZIndex="5" Canvas.Top="30" Canvas.Left="790" Source="Images/Icons/Ruby.png" Opacity="0.1"></Image>

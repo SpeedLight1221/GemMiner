@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <None Remove="Images\Background\Backpack.png" />
+    <None Remove="Images\Background\sky.png" />
+    <None Remove="Images\Background\Title.png" />
     <None Remove="Images\Characters\Player\Basic_Stand.png" />
     <None Remove="Images\Characters\Player\Left.png" />
     <None Remove="Images\Characters\Player\lleft.png" />
@@ -53,6 +55,8 @@
 
   <ItemGroup>
     <Resource Include="Images\Background\Backpack.png" />
+    <Resource Include="Images\Background\sky.png" />
+    <Resource Include="Images\Background\Title.png" />
     <Resource Include="Images\Characters\Player\lleft.png" />
     <Resource Include="Images\Characters\Player\Right.png" />
     <Resource Include="Images\Icons\bronze axe.png" />
