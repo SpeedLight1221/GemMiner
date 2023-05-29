@@ -2,6 +2,7 @@
 Project for my Programming class, a very limited terraria-like game made using the Windows Presentation Foundation 
 <hr>
 ## Features:
+
 * Mining and Gathering resources
 * Placing blocks
 * Crafting tools
@@ -9,6 +10,7 @@ Project for my Programming class, a very limited terraria-like game made using t
 
 <hr>
 ## The Game
+
 Your goal is to find and collect five Legendary gems which are hidden underground. The game keeps track of your time and displays it at the end
 
 <hr>
