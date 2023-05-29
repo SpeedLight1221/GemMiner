@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Projekt"
         WindowStartupLocation="CenterOwner"
         mc:Ignorable="d"
-        Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
-        Height="{x:Static SystemParameters.PrimaryScreenHeight}"
+        Width="1920"
+        Height="1080"
         WindowState="Maximized"
         WindowStyle="None"
         
@@ -16,13 +16,22 @@
 
 
     <Canvas  x:Name="MyCan">
-        <TextBlock Panel.ZIndex="9" Text="Press  'H' for Help!" Canvas.Left="1438" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Ellipse x:Name="black" Width="2200" Height="1292" Fill="LightGray" Canvas.Left="-332" Canvas.Top="-190" HorizontalAlignment="Center" VerticalAlignment="Top" Opacity="0.4" Panel.ZIndex="-1"></Ellipse>
-        <Image x:Name="TitleImg" Source="Images/Background/Title.png" Height="246" Width="600" Panel.ZIndex="8" Canvas.Left="468" Canvas.Bottom="618" Canvas.Top="116" HorizontalAlignment="Center" VerticalAlignment="Top" ></Image>
-        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="618" Canvas.Top="564" HorizontalAlignment="Left" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Center" FontFamily="High Tower Text" Content="Play" FontSize="50" FontWeight="Bold" x:Name="PlayBtn" Click="PlayBtn_Click"></Button>
-        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="618" Canvas.Top="663" HorizontalAlignment="Center" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Exit" FontSize="50" FontWeight="Bold" x:Name="ExitBtn" Click="ExitBtn_Click"></Button>
+        <TextBlock Panel.ZIndex="9" Text="Press  'H' for Help!" Canvas.Left="1822" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Ellipse x:Name="black" Width="2330" Height="2159" Fill="LightGray" Canvas.Left="-233" Canvas.Top="-445" HorizontalAlignment="Left" VerticalAlignment="Center" Opacity="0.4" Panel.ZIndex="-1"></Ellipse>
+        <Image x:Name="TitleImg" Source="Images/Background/Title.png" Height="246" Width="600" Panel.ZIndex="8" Canvas.Left="632" Canvas.Bottom="618" Canvas.Top="198" HorizontalAlignment="Left" VerticalAlignment="Top" ></Image>
+        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="810" Canvas.Top="554" HorizontalAlignment="Left" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Play" FontSize="50" FontWeight="Bold" x:Name="PlayBtn" Click="PlayBtn_Click"></Button>
+        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="810" Canvas.Top="674" HorizontalAlignment="Left" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Exit" FontSize="50" FontWeight="Bold" x:Name="ExitBtn" Click="ExitBtn_Click"></Button>
 
-        <Image Source="Images/Background/sky.png" x:Name="Title" Width="{Binding ActualWidth, ElementName=MyCan}" Height="869" Canvas.Left="0" Panel.ZIndex="7" Canvas.Bottom="0" Canvas.Top="0" HorizontalAlignment="Center" VerticalAlignment="Top"></Image>
+        <Image Source="Images/Background/sky.png" x:Name="Title" Width="2762" Height="1088" Panel.ZIndex="7" Canvas.Bottom="0" Canvas.Top="-4" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Canvas.Left="4">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="-0.397"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-3.718"/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
 
 
         <Rectangle  x:Name="Gem" Tag="________" Panel.ZIndex="5" Width="620" Height="120" Fill="Black" Opacity=".2" Canvas.Top="20" Canvas.Left="650" >

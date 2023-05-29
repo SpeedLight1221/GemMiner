@@ -102,6 +102,7 @@ namespace Projekt
             breaktimer.Interval = BreakTime; //sets the interval for breaking blocks
             selector.Width = 100; //creates the selector
             selector.Height = 100;
+            Panel.SetZIndex(selector, 6);
             selector.Fill = new SolidColorBrush((Color.FromArgb(128, 20, 20, 220)));
             MyCan.Children.Add(selector);
             Canvas.SetLeft(selector, Canvas.GetLeft(player) + 100);
