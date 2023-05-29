@@ -116,7 +116,7 @@ namespace Projekt
 
             }
 
-            MessageBox.Show(r1 + " " + r2 + " " + r3 + "\n" + x);
+            //MessageBox.Show(r1 + " " + r2 + " " + r3 + "\n" + x);
          
             List<Item> toremove = new List<Item>();
             if ((i1) && (i3) && (i2)) // if you have all resources
@@ -160,7 +160,7 @@ namespace Projekt
                     t += " " + c.Name;
                     InventoryCraft.Remove(c);
                 }
-                MessageBox.Show(t);
+               // MessageBox.Show(t);
 
 
 

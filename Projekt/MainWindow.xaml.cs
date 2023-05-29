@@ -516,7 +516,8 @@ namespace Projekt
         {
             double yy = Canvas.GetBottom(player) - 100;
             yy = Canvas.GetBottom(player) - 100;
-          
+
+      
 
             double time = 1;
             if (tse == true)
@@ -575,6 +576,7 @@ namespace Projekt
 
         public void levelCheck(object sender, EventArgs e)
         {
+         
             level = Canvas.GetBottom(player);
             move.Completed -= levelCheck;
         } //ensures that the level variable is up to dae
@@ -605,6 +607,15 @@ namespace Projekt
 
         public void Place()
         {
+            if(((Canvas.GetBottom(selector)-20)%100 ==0)||(Canvas.GetBottom(selector)==0 ))
+            {
+                
+            }
+            else
+            {
+                return;
+            }
+
 
             foreach (var PlaceCheck in MyCan.Children.OfType<Rectangle>())
             {
