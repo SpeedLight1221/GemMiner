@@ -20,7 +20,7 @@
         <Ellipse x:Name="black" Width="2330" Height="2159" Fill="LightGray" Canvas.Left="-233" Canvas.Top="-445" HorizontalAlignment="Left" VerticalAlignment="Center" Opacity="0.4" Panel.ZIndex="-1"></Ellipse>
         <Image x:Name="TitleImg" Source="Images/Background/Title.png" Height="246" Width="600" Panel.ZIndex="8" Canvas.Left="632" Canvas.Bottom="618" Canvas.Top="198" HorizontalAlignment="Left" VerticalAlignment="Top" ></Image>
         <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="810" Canvas.Top="554" HorizontalAlignment="Left" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Play" FontSize="50" FontWeight="Bold" x:Name="PlayBtn" Click="PlayBtn_Click"></Button>
-        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="810" Canvas.Top="674" HorizontalAlignment="Left" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Exit" FontSize="50" FontWeight="Bold" x:Name="ExitBtn" Click="ExitBtn_Click"></Button>
+        <Button Panel.ZIndex="8" Height="80" Width="300" Background="#6b480f" Canvas.Left="810" Canvas.Top="688" HorizontalAlignment="Center" BorderBrush="#47300a" BorderThickness="10"  VerticalAlignment="Top" FontFamily="High Tower Text" Content="Exit" FontSize="50" FontWeight="Bold" x:Name="ExitBtn" Click="ExitBtn_Click"></Button>
 
         <Image Source="Images/Background/sky.png" x:Name="Title" Width="2762" Height="1088" Panel.ZIndex="7" Canvas.Bottom="0" Canvas.Top="-4" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Canvas.Left="4">
             <Image.RenderTransform>
@@ -58,6 +58,7 @@
         <Rectangle x:Name="player"  Tag="Player" Width="100" Height="100" Fill="Red" Canvas.Left="10" Canvas.Bottom="120">
 
         </Rectangle>
+        <Button Panel.ZIndex="8" Height="37" Width="300" Background="#6b480f" Canvas.Left="810" Canvas.Top="639" BorderBrush="#47300a" BorderThickness="5" FontFamily="High Tower Text" Content="Seed" FontSize="20" FontWeight="Bold" x:Name="SeedBtn" Click="Seed_Click" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
 
 

@@ -1,0 +1,24 @@
+﻿<Window x:Class="Projekt.SeedW"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projekt"
+        mc:Ignorable="d"
+        Title="SeedW" Height="400" Width="800"
+        AllowsTransparency="True"
+        Background="#6b480f"
+        BorderBrush="#47300a"
+        BorderThickness="15"
+        WindowStyle="None"
+        >
+    <StackPanel>
+        <Label FontSize="25" FontWeight="Bold" HorizontalContentAlignment="Center" FontFamily="High Tower Text"> Input Seed</Label>
+        <Label  Height="50" FontSize="20"  HorizontalContentAlignment="Center" FontFamily="High Tower Text">Leave empty for random. &#xA; If shorter than 200,
+            the rest will be randomly generated. </Label>
+        <Label  Height="50" FontSize="20"  HorizontalContentAlignment="Center" FontFamily="High Tower Text">Numbers Only</Label>
+        <TextBox Width="600"   x:Name="SeedBox"></TextBox>
+        <Button Background="#47300a" Content="Ok" Margin="0,20,0,10" x:Name="Yes" Height="20" FontFamily="High Tower Text" Width="200" Click="Yes_Click" ></Button>
+        <Button Background="#47300a" Content="Cancel" x:Name="Cancel" Height="20" Width="200" FontFamily="High Tower Text" Click="Cancel_Click"></Button>
+    </StackPanel>
+</Window>

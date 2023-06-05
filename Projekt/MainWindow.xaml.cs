@@ -29,7 +29,7 @@ namespace Projekt
     {
         public Item Slot1;
         public Item Slot2;
-
+        public string Seed = "";
       
         public bool title = true;
 
@@ -184,6 +184,7 @@ namespace Projekt
                 {
                     MessageBox.Show("Press D/A for Movement \n Press Space for Jumping \n Press C to open Crafting Menu \n Press I to show Inventory \n Press Esc to Pause \n Left click to Mine \n Right Click to Place \n \n Your goal is to collect the five Legendary Gems! Good Luck!");
                 }
+                
 
                
                 
@@ -1047,12 +1048,20 @@ namespace Projekt
         public void Generate()
         {
             Random rnd = new Random();
-            string SeedPlus = "";
-            for (int i = 0; i < 201; i++)
-            {
+            string SeedPlus = Seed;
 
-                SeedPlus += Convert.ToString(rnd.Next(0, 10));
+            if(SeedPlus.Length < 200) {
+
+                for (int i = SeedPlus.Length; i < 201; i++)
+                {
+
+                    SeedPlus += Convert.ToString(rnd.Next(0, 10));
+                }
             }
+
+
+            
+            Seed = SeedPlus;
             //test.Content = SeedPlus;
 
             List<int> TreeLocsX = new List<int>();
@@ -1668,10 +1677,18 @@ namespace Projekt
             {
 
                 TimeSpan End = DateTime.Now.Subtract(Start);
-                MessageBox.Show($"You won \n Time: {End.Hours}:{End.Minutes}:{End.Seconds}:{End.Milliseconds}");
-                System.Environment.Exit(1);
+                MessageBoxResult r = MessageBox.Show($"You won \n Time: {End.Hours}:{End.Minutes}:{End.Seconds}:{End.Milliseconds} \n Seed:{Seed} \n Would you like to copy the seed?","Congratulations!",MessageBoxButton.YesNo );
+                if(r == MessageBoxResult.Yes)
+                {
+                    Clipboard.SetText(Seed);
+                    Environment.Exit(1);
+                }
+                else
+                {
+                    Environment.Exit(1);
+                }
 
-                
+                    
             }
         }
 
@@ -1709,13 +1726,30 @@ namespace Projekt
 
             MyCan.Children.Remove(PlayBtn);
             MyCan.Children.Remove(ExitBtn);
-
-            
-
+            MyCan.Children.Remove(SeedBtn);
 
 
 
-            
+
+
+
+
+
+        }
+
+        private void Seed_Click(object sender, RoutedEventArgs e)
+        {
+            SeedW x = new SeedW();
+            x.Show();
+
+
+            x.Closing += (s, e) =>
+            {
+                Seed = x.seeed;
+
+              
+
+            };
 
         }
     }
